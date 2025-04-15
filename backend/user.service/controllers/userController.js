@@ -74,15 +74,24 @@ export const login = async (req, res) => {
       return res.status(401).send("Incorrect password");
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    console.log("Generated JWT:", token);
-    res.json({ token });
+    // Lưu thông tin người dùng vào phiên làm việc
+    req.session.userId = user._id;
+    req.session.username = user.username;
+
+    console.log("User logged in:", { username: user.username });
+    res.status(200).json({ message: "Login successful", success: true });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error logging in");
   }
+};
+export const logout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send("Error logging out");
+    }
+    res.status(200).send("Logged out successfully");
+  });
 };
 
 export const getProfile = (req, res) => {

@@ -5,6 +5,7 @@ import swaggerUI from "swagger-ui-express";
 import connectDB from "./configs/connect-db.configs.js";
 import userRoutes from "./routes/userRoute.js";
 import morgan from "morgan";
+import session from "express-session";
 
 dotenv.config();
 
@@ -13,6 +14,16 @@ app.use(morgan("dev"));
 //middlewares
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: true }));
+// expresss-session setting
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET, // Thay thế bằng một chuỗi bí mật
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Chỉ nên dùng secure: true trong chế độ sản xuất với HTTPS
+  })
+);
 app.use(
   cors({
     origin: [
