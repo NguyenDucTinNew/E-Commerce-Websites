@@ -9,8 +9,9 @@ const roleSchema = new mongoose.Schema({
     trim: true,
   },
 });
+
 roleSchema.plugin(mongoosePaginate);
 // Tạo model từ schema
-const Role = mongoose.model("Role", roleSchema);
+const Role = mongoose.model("Role", roleSchema, "Role");
 
 export default Role;

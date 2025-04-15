@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   role: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "Role", // Liên kết đến model Role
     required: true,
   },
@@ -31,6 +31,6 @@ const userSchema = new mongoose.Schema({
 });
 userSchema.plugin(mongoosePaginate);
 // Tạo model từ schema
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema, "User");
 
 export default User;
