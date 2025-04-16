@@ -19,4 +19,4 @@ export const authMiddleware = async (req, res, next) => {
 };
 
 // Xuất isAuthenticated
-export const isAuthenticated = passport.authenticate("jwt", { session: false });
+export const isAuthenticated = passport.authenticate("jwt", { session: true });
