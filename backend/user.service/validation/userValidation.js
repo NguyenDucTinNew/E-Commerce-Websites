@@ -1,5 +1,5 @@
 import joi from "joi";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 // Xác thực thông tin người dùng
 export const userValidation = joi.object({
@@ -20,5 +20,4 @@ export const userValidation = joi.object({
     "string.min": "Mật khẩu phải có ít nhất 6 ký tự.",
     "any.required": "Mật khẩu là bắt buộc.",
   }),
-  role: joi.string(),
 });

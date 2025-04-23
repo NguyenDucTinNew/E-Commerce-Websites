@@ -5,7 +5,7 @@ import Role from "../models/roleModel.js"; // Import model Role
 import { HTTP_STATUS } from "../common/http-status.common.js"; // Import mã trạng thái HTTP
 
 export const register = async (req, res) => {
-  const { username, password, role, email } = req.body;
+  const { username, password, email } = req.body;
 
   try {
     // Kiểm tra sự tồn tại của tên người dùng
@@ -24,14 +24,6 @@ export const register = async (req, res) => {
         .json({ message: "Email already exists", success: false });
     }
 
-    // Kiểm tra và lấy ID của role
-    const foundRole = await Role.findOne({ name: role });
-    if (!foundRole) {
-      return res
-        .status(HTTP_STATUS.BAD_REQUEST)
-        .json({ message: "Role not found", success: false });
-    }
-
     // Mã hóa password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -39,13 +31,12 @@ export const register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      role: foundRole._id, // Lưu ID của role
+      role: "67fe60dab95566e66a97431c", // Lưu ID của role
     });
 
     console.log("New User Created:", {
       username,
       email,
-      role,
     });
     await newUser.save();
     res
@@ -77,6 +68,7 @@ export const login = async (req, res) => {
     // Lưu thông tin người dùng vào phiên làm việc
     req.session.userId = user._id;
     req.session.username = user.username;
+    req.session.role = user.role; // Lưu role vào phiên làm việc
 
     console.log("User logged in:", { username: user.username });
     res.status(200).json({ message: "Login successful", success: true });

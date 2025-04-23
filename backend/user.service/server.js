@@ -6,14 +6,15 @@ import connectDB from "./configs/connect-db.configs.js";
 import userRoutes from "./routes/userRoute.js";
 import morgan from "morgan";
 import session from "express-session";
+import passport from "passport";
 
 dotenv.config();
-
+// Sử dụng MemoryStore cho phiên làm việc (chỉ dùng cho phát triển, không nên dùng trong sản xuất)
 const app = express();
 app.use(morgan("dev"));
 //middlewares
 app.use(express.json());
-
+const store = session.MemoryStore();
 app.use(express.urlencoded({ extended: true }));
 // expresss-session setting
 app.use(
@@ -21,7 +22,8 @@ app.use(
     secret: process.env.SESSION_SECRET, // Thay thế bằng một chuỗi bí mật
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Chỉ nên dùng secure: true trong chế độ sản xuất với HTTPS
+    cookie: { maxAge: 1000 * 20 }, // Chỉ nên dùng secure: true trong chế độ sản xuất với HTTPs
+    store,
   })
 );
 app.use(
@@ -37,10 +39,6 @@ app.use(
   })
 );
 
-app.get("/", (_, res) => {
-  res.send("hello world");
-});
-
 //conect db
 connectDB();
 
@@ -53,6 +51,9 @@ app.listen(port, () => {
   console.log("🚀 ~ app.listen ~ port:", port);
 });
 
+app.use(passport.initialize()); // Khởi tạo passport
+app.use(passport.session()); // Sử dụng session để lưu trữ thông tin người dùng đã xác thực
+// xu li loi khi co su co xay ra trong middleware
 app.use(async (req, res) => {
   try {
     await func(req, res, next);

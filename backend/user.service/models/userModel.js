@@ -21,8 +21,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    ref: "Role", // Liên kết đến model Role
-    required: true,
+    default: "user", // Giá trị mặc định là "user"
   },
   createdAt: {
     type: Date,
