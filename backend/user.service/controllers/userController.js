@@ -49,7 +49,7 @@ export const register = async (req, res) => {
       .json({ message: "Error registering user", success: false });
   }
 };
-
+/*
 export const login = async (req, res) => {
   const { username, password } = req.body;
 
@@ -77,6 +77,7 @@ export const login = async (req, res) => {
     res.status(500).send("Error logging in");
   }
 };
+*/
 export const logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {

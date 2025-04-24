@@ -1,6 +1,7 @@
 import User from "../models/userModel.js"; // Đảm bảo đường dẫn đúng
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
+import passport from "passport";
 
 // Cấu hình Passport
 passport.use(
@@ -19,25 +20,26 @@ passport.use(
       }
 
       // Nếu xác thực thành công, trả về người dùng
-      return done(null, user);
+      return done(null, user); // call serializeUser
     } catch (error) {
       return done(error);
     }
   })
 );
 
-// Serialize và Deserialize
-passport.serializeUser((user, done) => {
- 
-  done(null, user.id);// Lưu ID người dùng vào session
-  // Lưu role người dùng vào session nếu cần thiết
-});
+  // Serialize và Deserialize
+  passport.serializeUser((user, done) => {
+    done(null, user.id); // Lưu ID người dùng vào session
+    // Lưu role người dùng vào session nếu cần thiết
+  });
 
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user); // Lưu thông tin người dùng vào req.user
-  } catch (error) {
-    done(error);
-  }
-});
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await User.findById(id);
+      done(null, user); // Lưu thông tin người dùng vào req.user
+    } catch (error) {
+      done(error);
+    }
+  });
+
+export default passport;

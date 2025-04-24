@@ -7,25 +7,34 @@ import userRoutes from "./routes/userRoute.js";
 import morgan from "morgan";
 import session from "express-session";
 import passport from "passport";
+// Đảm bảo đường dẫn đúng
 
 dotenv.config();
 // Sử dụng MemoryStore cho phiên làm việc (chỉ dùng cho phát triển, không nên dùng trong sản xuất)
 const app = express();
 app.use(morgan("dev"));
 //middlewares
-app.use(express.json());
 const store = session.MemoryStore();
 app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json());
+
 // expresss-session setting
 app.use(
   session({
     secret: process.env.SESSION_SECRET, // Thay thế bằng một chuỗi bí mật
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 1000 * 20 }, // Chỉ nên dùng secure: true trong chế độ sản xuất với HTTPs
+    cookie: { maxAge: 1000 * 5 }, //5s
+    httpOnly: true, // Chỉ cho phép cookie được gửi qua HTTP, không qua JavaScript
+    secure: true, // Chỉ nên đặt true khi sử dụng HTTPS
     store,
   })
 );
+app.use(passport.initialize()); // Khởi tạo passport
+app.use(passport.session()); // Sử dụng session để lưu trữ thông tin người dùng đã xác thực
+//routes
+app.use(`/api/v1`, userRoutes);
 app.use(
   cors({
     origin: [
@@ -42,26 +51,8 @@ app.use(
 //conect db
 connectDB();
 
-//routes
-app.use(`/api/v1`, userRoutes);
-
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log("🚀 ~ app.listen ~ port:", port);
-});
-
-app.use(passport.initialize()); // Khởi tạo passport
-app.use(passport.session()); // Sử dụng session để lưu trữ thông tin người dùng đã xác thực
-// xu li loi khi co su co xay ra trong middleware
-app.use(async (req, res) => {
-  try {
-    await func(req, res, next);
-  } catch (error) {
-    console.log("🚀 ~ app.use ~ error:", error);
-    return res.status(500).json({
-      message: error.message,
-      success: false,
-    });
-  }
 });
