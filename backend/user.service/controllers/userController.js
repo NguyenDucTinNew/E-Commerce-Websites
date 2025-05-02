@@ -1,7 +1,5 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import Role from "../models/roleModel.js"; // Import model Role
 import { HTTP_STATUS } from "../common/http-status.common.js"; // Import mã trạng thái HTTP
 
 export const register = async (req, res) => {
@@ -89,4 +87,33 @@ export const logout = (req, res) => {
 
 export const getProfile = (req, res) => {
   res.json(req.user);
+};
+export const test = async (req, res) => {
+  res.json({
+    message: "Test function for admin success",
+    success: true,
+  });
+};
+
+export const changepassword = async (req, res) => {
+  try {
+    // get username and paswpord from req.body
+    const { username, password } = req.body;
+    const existingUser = await User.findOne({ username }); // Lấy thông tin người dùng từ req.user
+    // Hash the new password
+    console.log(existingUser);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Update the user's password
+    existingUser.password = hashedPassword;
+    await existingUser.save();
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ message: "Password updated successfully", success: true });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ message: "Error updating password", success: false });
+  }
 };

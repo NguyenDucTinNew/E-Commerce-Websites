@@ -1,5 +1,5 @@
-import { HTTP_STATUS } from '../common/http-status.common.js';
-import { categoryValidation } from '../validation/category.validation.js';
+import { HTTP_STATUS } from "../common/http-status.common.js";
+import { categoryValidation } from "../validation/category.validation.js";
 
 export const categoryMiddleware = async (req, res, next) => {
   const body = req.body;

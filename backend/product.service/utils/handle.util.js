@@ -1,5 +1,3 @@
-import { TypeToken } from "../common/type.common.js";
-
 export const wrapRequestHandler = (func) => {
   return async (req, res, next) => {
     //Xử lý bất đồng bộ trong express

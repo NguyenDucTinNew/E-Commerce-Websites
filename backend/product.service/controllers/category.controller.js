@@ -1,5 +1,5 @@
-import { HTTP_STATUS } from '../common/http-status.common.js';
-import { categoryService } from '../service/category.service.js';
+import { HTTP_STATUS } from "../common/http-status.common.js";
+import { categoryService } from "../service/category.service.js";
 
 export const categoryController = {
   createCategory: async (req, res) => {
@@ -9,12 +9,12 @@ export const categoryController = {
     const newCategory = await categoryService.createCategory(body);
     if (!newCategory)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        message: 'Tạo danh mục thất bại',
+        message: "Tạo danh mục thất bại",
         success: false,
       });
 
     return res.status(HTTP_STATUS.OK).json({
-      message: 'Tạo danh mục thành công!',
+      message: "Tạo danh mục thành công!",
       success: true,
       data: newCategory,
     });
@@ -26,11 +26,11 @@ export const categoryController = {
     const category = await categoryService.getCategoryById(idCategory);
     if (!category)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        message: 'Tải loại sản phẩm thất bại!',
+        message: "Tải loại sản phẩm thất bại!",
         success: false,
       });
     return res.status(HTTP_STATUS.OK).json({
-      message: 'Tải loại sản phẩm thành công!',
+      message: "Tải loại sản phẩm thành công!",
       success: true,
       data: category,
     });
@@ -41,11 +41,11 @@ export const categoryController = {
     const listCategory = await categoryService.fetchListCategory();
     if (!listCategory)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        message: 'Tải danh sách loại sản phẩm thất bại!',
+        message: "Tải danh sách loại sản phẩm thất bại!",
         success: false,
       });
     return res.status(HTTP_STATUS.OK).json({
-      message: 'Tải danh sách loại sản phẩm thành công!',
+      message: "Tải danh sách loại sản phẩm thành công!",
       success: true,
       data: listCategory,
     });
@@ -58,11 +58,11 @@ export const categoryController = {
     const result = await categoryService.updateCategory(idCategory, body);
     if (!result)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        message: 'Cập nhật loại sản phẩm thất bại!',
+        message: "Cập nhật loại sản phẩm thất bại!",
         success: false,
       });
     return res.status(HTTP_STATUS.OK).json({
-      message: 'Cập nhật loại sản phẩm thành công!',
+      message: "Cập nhật loại sản phẩm thành công!",
       success: true,
       data: result,
     });
@@ -74,11 +74,11 @@ export const categoryController = {
     const result = await categoryService.deleteCategory(idCategory);
     if (!result)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        message: 'Xóa loại sản phẩm thất bại!',
+        message: "Xóa loại sản phẩm thất bại!",
         success: false,
       });
     return res.status(HTTP_STATUS.OK).json({
-      message: 'Xóa loại sản phẩm thành công!',
+      message: "Xóa loại sản phẩm thành công!",
       success: true,
     });
   },
