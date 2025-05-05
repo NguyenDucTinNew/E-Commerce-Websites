@@ -5,10 +5,8 @@ import swaggerUI from "swagger-ui-express";
 import connectDB from "./configs/connect-db.configs.js";
 import userRoutes from "./routes/userRoute.js";
 import morgan from "morgan";
-import passport from "passport";
 import session from "express-session";
-import redisConfig from "./configs/init.redis.js"; // Nhập file cấu hình Redis
-import { RedisStore } from "connect-redis";
+import passport from "passport";
 
 dotenv.config();
 const app = express();
@@ -18,30 +16,19 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Initialize Redis
-redisConfig.initRedis();
-// Create Redis store
-const redisStore = new RedisStore({
-  client: redisConfig.getRedis(), // Your Redis client
-  prefix: "mysession", // Optional key prefix
-  ttl: 86400, // Session TTL in seconds (optional)
-});
 // express-session settings
 app.use(
   session({
-    store: redisStore, // Sử dụng RedisStore
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET, // Thay thế bằng chuỗi bí mật
     resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: true,
-      secure: false,
-    },
+    saveUninitialized: true,
+    cookie: { maxAge: 100000000 * 5 }, // Thời gian cookie
+    httpOnly: true,
+    secure: false, // Đặt true chỉ khi bạn đang sử dụng HTTPS
   })
 );
 
-// Passport
+// Sử dụng Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -58,23 +45,15 @@ app.use(
   })
 );
 
-// Database connection
+// Kết nối đến cơ sở dữ liệu
 connectDB();
-
-// Routes
 app.get("/getsession", (req, res) => {
   res.send(req.session);
 });
-
+// Định nghĩa routes
 app.use(`/api/v1`, userRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log("🚀 Server running on port:", port);
-});
-
-// Đóng kết nối Redis khi ứng dụng dừng
-process.on("SIGINT", async () => {
-  await redisConfig.closeRedis();
-  process.exit();
+  console.log("🚀 ~ app.listen ~ port:", port);
 });
