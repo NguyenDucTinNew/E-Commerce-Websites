@@ -1,14 +1,12 @@
 import { categoryController } from "../controllers/category.controller.js";
 import { categoryMiddleware } from "../middleware/category.middleware.js";
 import { wrapRequestHandler } from "../utils/handle.util.js";
-import { isAuthenticated } from "../middleware/authMiddleware.js";
 import express from "express";
 
 const router = express.Router();
 // POST : create new category
 router.post(
   "/category",
-  wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
   wrapRequestHandler(categoryMiddleware),
   wrapRequestHandler(categoryController.createCategory)
 );

@@ -15,17 +15,6 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// express-session settings
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET, // Thay thế bằng chuỗi bí mật
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 100000000 * 5 }, // Thời gian cookie
-    httpOnly: true,
-    secure: false, // Đặt true chỉ khi bạn đang sử dụng HTTPS
-  })
-);
 
 app.use(
   cors({
@@ -42,9 +31,6 @@ app.use(
 
 // Kết nối đến cơ sở dữ liệu
 connectDB();
-app.get("/getsession", (req, res) => {
-  res.send(req.session);
-});
 // Định nghĩa routes
 app.use(`/api/v1`, rootRoutes);
 

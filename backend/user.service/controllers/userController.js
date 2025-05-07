@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import { HTTP_STATUS } from "../common/http-status.common.js"; // Import mã trạng thái HTTP
+import { userService } from "../services/user.service.js";
 
 export const register = async (req, res) => {
   const { username, password, email } = req.body;
@@ -88,14 +89,15 @@ export const logout = (req, res) => {
 export const getProfile = (req, res) => {
   res.json(req.user);
 };
+/*
 export const test = async (req, res) => {
   res.json({
     message: "Test function for admin success",
     success: true,
   });
 };
-
-export const changepassword = async (req, res) => {
+*/
+export const changePassword = async (req, res) => {
   try {
     // get username and paswpord from req.body
     const { username, password } = req.body;
@@ -116,4 +118,65 @@ export const changepassword = async (req, res) => {
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
       .json({ message: "Error updating password", success: false });
   }
+};
+
+export const getuserbyId = async (req, res) => {
+  const { userid } = req.param;
+  const user = await userService.getUserById(userid);
+  if (!user) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({
+      message: "User not found",
+      success: false,
+    });
+  }
+  return res.status(HTTP_STATUS.OK).json({
+    message: "Get user by id success",
+    success: true,
+    data: user,
+  });
+};
+export const getLisUser = async (req, res) => {
+  const users = await userService.getAllUsers();
+  if (!users) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({
+      message: "User not found",
+      success: false,
+    });
+  }
+  return res.status(HTTP_STATUS.OK).json({
+    message: "Get list user success",
+    success: true,
+    data: users,
+  });
+};
+export const deleteUser = async (req, res) => {
+  const { userid } = req.param;
+  const user = await userService.deleteUser(userid); //delete user by id
+  if (!user) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({
+      message: "User not found",
+      success: false,
+    });
+  }
+  return res.status(HTTP_STATUS.OK).json({
+    message: "Delete user success",
+    success: true,
+    data: user,
+  });
+};
+export const updateUser = async (req, res) => {
+  const { userid } = req.param;
+  const data = req.body;
+  const userupdate = await userService.updateUser(userid, data); //update user by id
+  if (!userupdate) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({
+      message: "User not found",
+      success: false,
+    });
+  }
+  return res.status(HTTP_STATUS.OK).json({
+    message: "Update user success",
+    success: true,
+    data: userupdate,
+  });
 };
