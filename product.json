@@ -1,0 +1,302 @@
+[
+  {
+    "name": "Táo đỏ",
+    "description": "Táo đỏ tươi ngon, giàu vitamin.",
+    "price": 20000,
+    "stock": 100,
+    "categoryId": "681b162689bac892aa3c2d37",
+    "images": [
+      "https://example.com/images/tao-do.jpg"
+    ]
+  },
+  {
+    "name": "Chuối",
+    "description": "Chuối chín vàng, ngọt ngào.",
+    "price": 15000,
+    "stock": 150,
+    "categoryId": "681b162689bac892aa3c2d38",
+    "images": [
+      "https://example.com/images/chuoi.jpg"
+    ]
+  },
+  {
+    "name": "Cam",
+    "description": "Cam tươi, nhiều nước, giàu vitamin C.",
+    "price": 25000,
+    "stock": 80,
+    "categoryId": "681b162689bac892aa3c2d39",
+    "images": [
+      "https://example.com/images/cam.jpg"
+    ]
+  },
+  {
+    "name": "Nho",
+    "description": "Nho tươi, ngọt và giòn.",
+    "price": 30000,
+    "stock": 120,
+    "categoryId": "681b162689bac892aa3c2d3a",
+    "images": [
+      "https://example.com/images/nho.jpg"
+    ]
+  },
+  {
+    "name": "Dưa hấu",
+    "description": "Dưa hấu mát lạnh, thích hợp cho mùa hè.",
+    "price": 35000,
+    "stock": 90,
+    "categoryId": "681b162689bac892aa3c2d3b",
+    "images": [
+      "https://example.com/images/dua-hau.jpg"
+    ]
+  },
+  {
+    "name": "Kiwi",
+    "description": "Kiwi thơm ngon, giàu vitamin.",
+    "price": 40000,
+    "stock": 60,
+    "categoryId": "681b162689bac892aa3c2d3c",
+    "images": [
+      "https://example.com/images/kiwi.jpg"
+    ]
+  },
+  {
+    "name": "Xoài",
+    "description": "Xoài chín ngọt, thích hợp cho mùa hè.",
+    "price": 30000,
+    "stock": 110,
+    "categoryId": "681b162689bac892aa3c2d3d",
+    "images": [
+      "https://example.com/images/xoai.jpg"
+    ]
+  },
+  {
+    "name": "Lê",
+    "description": "Lê ngọt mát, giòn tan.",
+    "price": 25000,
+    "stock": 80,
+    "categoryId": "681b162689bac892aa3c2d3e",
+    "images": [
+      "https://example.com/images/le.jpg"
+    ]
+  },
+  {
+    "name": "Dứa",
+    "description": "Dứa ngọt, thơm, giàu vitamin.",
+    "price": 30000,
+    "stock": 70,
+    "categoryId": "681b162689bac892aa3c2d3f",
+    "images": [
+      "https://example.com/images/dua.jpg"
+    ]
+  },
+  {
+    "name": "Bưởi",
+    "description": "Bưởi ngọt, nhiều nước.",
+    "price": 28000,
+    "stock": 50,
+    "categoryId": "681b162689bac892aa3c2d40",
+    "images": [
+      "https://example.com/images/buoi.jpg"
+    ]
+  },
+  {
+    "name": "Mãng cầu",
+    "description": "Mãng cầu ngọt, thơm.",
+    "price": 32000,
+    "stock": 40,
+    "categoryId": "681b162689bac892aa3c2d41",
+    "images": [
+      "https://example.com/images/mang-cau.jpg"
+    ]
+  },
+  {
+    "name": "Quýt",
+    "description": "Quýt dễ ăn, ngọt.",
+    "price": 18000,
+    "stock": 150,
+    "categoryId": "681b162689bac892aa3c2d42",
+    "images": [
+      "https://example.com/images/quyt.jpg"
+    ]
+  },
+  {
+    "name": "Đào",
+    "description": "Đào ngọt, thơm.",
+    "price": 25000,
+    "stock": 90,
+    "categoryId": "681b162689bac892aa3c2d43",
+    "images": [
+      "https://example.com/images/dao.jpg"
+    ]
+  },
+  {
+    "name": "Cherry",
+    "description": "Cherry ngọt, đỏ tươi.",
+    "price": 60000,
+    "stock": 30,
+    "categoryId": "681b162689bac892aa3c2d44",
+    "images": [
+      "https://example.com/images/cherry.jpg"
+    ]
+  },
+  {
+    "name": "Lựu",
+    "description": "Lựu chín, ngọt.",
+    "price": 50000,
+    "stock": 20,
+    "categoryId": "681b162689bac892aa3c2d45",
+    "images": [
+      "https://example.com/images/luu.jpg"
+    ]
+  },
+  {
+    "name": "Chanh",
+    "description": "Chanh chua, tươi.",
+    "price": 10000,
+    "stock": 200,
+    "categoryId": "681b162689bac892aa3c2d46",
+    "images": [
+      "https://example.com/images/chanh.jpg"
+    ]
+  },
+  {
+    "name": "Ổi",
+    "description": "Ổi ngọt, giòn.",
+    "price": 22000,
+    "stock": 80,
+    "categoryId": "681b162689bac892aa3c2d47",
+    "images": [
+      "https://example.com/images/oi.jpg"
+    ]
+  },
+  {
+    "name": "Nho khô",
+    "description": "Nho khô ngọt, tiện lợi.",
+    "price": 35000,
+    "stock": 60,
+    "categoryId": "681b162689bac892aa3c2d48",
+    "images": [
+      "https://example.com/images/nho-kho.jpg"
+    ]
+  },
+  {
+    "name": "Mơ",
+    "description": "Mơ chua, thơm.",
+    "price": 15000,
+    "stock": 100,
+    "categoryId": "681b162689bac892aa3c2d49",
+    "images": [
+      "https://example.com/images/mo.jpg"
+    ]
+  },
+  {
+    "name": "Bơ",
+    "description": "Bơ mềm, béo.",
+    "price": 40000,
+    "stock": 50,
+    "categoryId": "681b162689bac892aa3c2d4a",
+    "images": [
+      "https://example.com/images/bo.jpg"
+    ]
+  },
+  {
+    "name": "Mít",
+    "description": "Mít thơm, ngọt.",
+    "price": 30000,
+    "stock": 70,
+    "categoryId": "681b162689bac892aa3c2d4b",
+    "images": [
+      "https://example.com/images/mit.jpg"
+    ]
+  },
+  {
+    "name": "Trái cây sấy",
+    "description": "Trái cây sấy khô, tiện lợi.",
+    "price": 45000,
+    "stock": 40,
+    "categoryId": "681b162689bac892aa3c2d4c",
+    "images": [
+      "https://example.com/images/trai-cay-say.jpg"
+    ]
+  },
+  {
+    "name": "Dưa lưới",
+    "description": "Dưa lưới ngọt, mát.",
+    "price": 30000,
+    "stock": 50,
+    "categoryId": "681b162689bac892aa3c2d3b",
+    "images": [
+      "https://example.com/images/dua-luoi.jpg"
+    ]
+  },
+  {
+    "name": "Mâm xôi",
+    "description": "Mâm xôi chua ngọt.",
+    "price": 70000,
+    "stock": 30,
+    "categoryId": "681b162689bac892aa3c2d44",
+    "images": [
+      "https://example.com/images/mam-xoi.jpg"
+    ]
+  },
+  {
+    "name": "Dâu Tây",
+    "description": "Dâu tây ngọt, đỏ mọng.",
+    "price": 80000,
+    "stock": 20,
+    "categoryId": "681b162689bac892aa3c2d44",
+    "images": [
+      "https://example.com/images/dau-tay.jpg"
+    ]
+  },
+  {
+    "name": "Bơ sữa",
+    "description": "Bơ sữa ngọt ngào.",
+    "price": 35000,
+    "stock": 60,
+    "categoryId": "681b162689bac892aa3c2d4a",
+    "images": [
+      "https://example.com/images/bo-sua.jpg"
+    ]
+  },
+  {
+    "name": "Hồng",
+    "description": "Hồng ngọt, thơm.",
+    "price": 25000,
+    "stock": 40,
+    "categoryId": "681b162689bac892aa3c2d43",
+    "images": [
+      "https://example.com/images/hong.jpg"
+    ]
+  },
+  {
+    "name": "Nho xanh",
+    "description": "Nho xanh giòn, ngọt.",
+    "price": 28000,
+    "stock": 90,
+    "categoryId": "681b162689bac892aa3c2d3a",
+    "images": [
+      "https://example.com/images/nho-xanh.jpg"
+    ]
+  },
+  {
+    "name": "Dưa hấu vàng",
+    "description": "Dưa hấu vàng ngọt.",
+    "price": 36000,
+    "stock": 80,
+    "categoryId": "681b162689bac892aa3c2d3b",
+    "images": [
+      "https://example.com/images/dua-hau-vang.jpg"
+    ]
+  },
+  {
+    "name": "Bưởi da xanh",
+    "description": "Bưởi da xanh ngọt.",
+    "price": 32000,
+    "stock": 70,
+    "categoryId": "681b162689bac892aa3c2d40",
+    "images": [
+      "https://example.com/images/buoi-da-xanh.jpg"
+    ]
+  }
+]

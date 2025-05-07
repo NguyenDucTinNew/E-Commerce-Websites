@@ -1,12 +1,18 @@
-//import product from "../model/product.model.js";
-import { HTTP_STATUS } from "../common/http-status.common.js";
-import productService from "../service/product.service.js";
+import axios from "axios";
+import config from "../../config.js";
+import * as dotenv from "dotenv";
+import { HTTP_STATUS } from "../../common/http-status.common.js";
+dotenv.config();
 
 export const productController = {
-  createProduct: async (req, res) => {
+  create: async (req, res) => {
     const body = req.body;
     // create
-    const newProduct = await productService.createProduct(body);
+    const newProduct = await axios.post(
+      `${process.env.PRODUCT_SERVICE_URL}/create`,
+      body,
+      config
+    );
     if (!newProduct)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         message: "Tạo sản phẩm thất bại",
@@ -16,14 +22,17 @@ export const productController = {
     return res.status(HTTP_STATUS.OK).json({
       message: "Tạo sản phẩm thành công!",
       success: true,
-      data: newProduct,
+      data: newProduct.data,
     });
   },
   //get product
   getProductById: async (req, res) => {
     const { idProduct } = req.params;
     // get product detail
-    const productDetail = await productService.getProductById(idProduct);
+    const productDetail = await axios.get(
+      `${process.env.PRODUCT_SERVICE_URL}/getproduct/${idProduct}`,
+      config
+    );
     if (!productDetail)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         message: "Tải sản phẩm thất bại!",
@@ -32,13 +41,16 @@ export const productController = {
     return res.status(HTTP_STATUS.OK).json({
       message: "Tải sản phẩm thành công!",
       success: true,
-      data: productDetail,
+      data: productDetail.data,
     });
   },
   //fetch list product
   fetchListProduct: async (req, res) => {
     //fetch list
-    const listProduct = await productService.fetchListProduct();
+    const listProduct = await axios.get(
+      `${process.env.PRODUCT_SERVICE_URL}/fetchlistproduct`,
+      config
+    );
     if (!listProduct)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         message: "Tải danh sách sản phẩm thất bại!",
@@ -47,7 +59,7 @@ export const productController = {
     return res.status(HTTP_STATUS.OK).json({
       message: "Tải danh sách sản phẩm thành công!",
       success: true,
-      data: listProduct,
+      data: listProduct.data,
     });
   },
   //update product
@@ -55,67 +67,79 @@ export const productController = {
     const body = req.body;
     const { idProduct } = req.params;
     //update
-    const result = await productService.updateProduct(idProduct, body);
+    const result = await axios.put(
+      `${process.env.PRODUCT_SERVICE_URL}/updateproduct/${idProduct}`,
+      body,
+      config
+    );
     if (!result)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         message: "Cập nhật sản phẩm thất bại",
         success: false,
       });
-
     return res.status(HTTP_STATUS.OK).json({
       message: "Cập nhật sản phẩm thành công!",
       success: true,
-      data: result,
+      data: result.data,
     });
   },
   //delete product
   deleteProduct: async (req, res) => {
     const { idProduct } = req.params;
     //delete
-    const result = await productService.deleteProduct(idProduct);
+    const result = await axios.delete(
+      `${process.env.PRODUCT_SERVICE_URL}/deleteproduct/${idProduct}`,
+      config
+    );
     if (!result)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         message: "Xóa sản phẩm thất bại",
         success: false,
       });
-
     return res.status(HTTP_STATUS.OK).json({
       message: "Xóa sản phẩm thành công!",
       success: true,
-      data: result,
+      data: result.data,
     });
   },
-  getproductbyCategory: async (req, res) => {
+  //get product by category
+  getProductByCategory: async (req, res) => {
     const { idCategory } = req.params;
-    // get product detail
-    const productDetail = await productService.getproductbycategory(idCategory);
-    if (!productDetail)
+    //get product by category
+    const productByCategory = await axios.get(
+      `${process.env.PRODUCT_SERVICE_URL}/getproductbyCategory/${idCategory}`,
+      config
+    );
+    if (!productByCategory)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        message: "Tải sản phẩm thất bại!",
+        message: "Tải sản phẩm theo danh mục thất bại!",
         success: false,
       });
     return res.status(HTTP_STATUS.OK).json({
-      message: "Tải sản phẩm thành công!",
+      message: "Tải sản phẩm theo danh mục thành công!",
       success: true,
-      data: productDetail,
-    });
-  },
-  getproductbyname: async (req, res) => {
-    const { name } = req.params;
-    // get product detail
-    const productDetail = await productService.getproductbyname(name);
-    if (!productDetail)
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        message: "Tải sản phẩm thất bại!",
-        success: false,
-      });
-    return res.status(HTTP_STATUS.OK).json({
-      message: "Tải sản phẩm thành công!",
-      success: true,
-      data: productDetail,
+      data: productByCategory.data,
     });
   },
   //get product by name
+  getProductByName: async (req, res) => {
+    const { name } = req.params;
+    //get product by name
+    const productByName = await axios.get(
+      `${process.env.PRODUCT_SERVICE_URL}/getproductbyname/${name}`,
+      config
+    );
+    if (!productByName)
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: "Tải sản phẩm theo tên thất bại!",
+        success: false,
+      });
+    return res.status(HTTP_STATUS.OK).json({
+      message: "Tải sản phẩm theo tên thành công!",
+      success: true,
+      data: productByName.data,
+    });
+  },
 };
 
 export default productController;

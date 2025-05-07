@@ -36,6 +36,15 @@ const productService = {
     if (!deletedProduct) return null;
     return deletedProduct;
   },
+  getproductbyname: async (name) => {
+    const productDetail = await product.find({ name: { $regex: name } });
+    if (!productDetail) return null;
+    return productDetail;
+  },
+  getproductbycategory: async (categoryId) => {
+    const productDetail = await product.find({ categoryId: categoryId });
+    if (!productDetail) return null;
+    return productDetail;
+  },
 };
-
 export default productService;

@@ -24,5 +24,12 @@ router.delete(
   "/delete/:id",
   wrapRequestHandler(productController.deleteProduct)
 );
-
+router.get(
+  "/getByCategory/:categoryId",
+  wrapRequestHandler(productController.getproductbyCategory)
+);
+router.get(
+  "/getproductbyname/:name",
+  wrapRequestHandler(productController.getproductbyname)
+);
 export default router;
