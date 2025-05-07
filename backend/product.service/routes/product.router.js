@@ -6,7 +6,7 @@ import express from "express";
 const router = express.Router();
 
 router.post(
-  "/create",
+  "/createProduct",
   wrapRequestHandler(productMiddleware),
   wrapRequestHandler(productController.createProduct)
 );

@@ -28,7 +28,7 @@ router.post(
 );
 // user.routes.js
 router.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
+  passport.authenticate("local", async (err, user, info) => {
     if (err) return next(err);
     if (!user) {
       return res.status(401).json({
@@ -44,9 +44,10 @@ router.post("/login", (req, res, next) => {
       const sessionData = {
         userId: user.id,
         role: user.role,
-        // Các thông tin khác cần thiết
       };
 
+      req.session.user = sessionData;
+      // Lưu thông tin vào Redis sau khi đăng nhập thành công
       await redisConfig.getRedis().set(
         req.sessionID,
         JSON.stringify(sessionData),
@@ -60,20 +61,19 @@ router.post("/login", (req, res, next) => {
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
-      console.log(req.session.id); // In ra token để kiểm tra
+      console.log("sessionId", req.sessionID); // In ra session ID để kiểm tra
+
       // Thêm token vào header
       res.setHeader("Authorization", `Bearer ${token}`);
-      console.log("Token:", token); // In ra token để kiểm tra
       return res.status(200).json({
         success: true,
         message: "Login success",
-        token, // Trả về token cho client
+        token,
         user: {
           id: user.id,
           name: user.name,
           email: user.email,
           role: user.role,
-          // Chỉ trả về thông tin cần thiết
         },
       });
     });
@@ -126,10 +126,11 @@ router.put(
   wrapRequestHandler(authMiddleware), // Kiểm tra dữ liệu đầu vào
   wrapRequestHandler(updateUser) // Cập nhật thông tin người dùng
 );
-router.get("/getRoleFromRedis", async (req, res) => {
+router.get("/getRoleFromRedis/:sessionId", async (req, res) => {
   //get role from redis with key userRole
-  const userRole = "userRole"; // Key để lưu trữ role trong Redis
-  const sessionData = await redisConfig.getRedis().get(userRole); // Hàm để lấy session từ Redis
+  const { sessionId } = req.params; // Lấy session ID từ request params
+  const sessionDatastring = await redisConfig.getRedis().get(sessionId); // Hàm để lấy session từ Redis
+  const sessionData = JSON.parse(sessionDatastring); // Chuyển đổi dữ liệu JSON thành đối tượng JavaScript
   if (!sessionData) {
     return res.status(401).json({ message: "Invalid session" });
   } else {

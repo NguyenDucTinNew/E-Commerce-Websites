@@ -1,19 +1,45 @@
 import axios from "axios";
 import { HTTP_STATUS } from "../common/http-status.common.js";
+import jwt from "jsonwebtoken";
 //import  redisconfig from "../configs/init.redis.js"; // Đảm bảo đường dẫn đúng
 //checkrole middleware
-const checkPremission = (requiredRole) => {
+const checkPermission = (requiredRole) => {
   return async (req, res, next) => {
-    const userRole = await axios.get(
-      `${process.env.USER_SERVICE_URL}/getRoleFromRedis`
-    );
-    if (userRole.data.role !== requiredRole) {
-      return res.status(HTTP_STATUS.FORBIDDEN).json({
-        message: "Bạn không có quyền truy cập vào tài nguyên này",
-        success: false,
-      });
+    try {
+      // 1. Lấy token từ header
+      const authHeader = req.headers.authorization;
+      const token = authHeader.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const sessionId = decoded.sessionId;
+
+      if (!sessionId) {
+        return res
+          .status(401)
+          .json({ message: "Invalid token: sessionId missing" });
+      }
+
+      // 3. Lấy role từ Redis thông qua user service
+      const response = await axios.get(
+        `${process.env.USER_SERVICE_URL}/getRoleFromRedis/${sessionId}`
+      );
+
+      const userRole = response.data.role;
+      console.log("User role:", userRole);
+
+      // 4. Kiểm tra quyền
+      if (userRole !== requiredRole) {
+        return res.status(403).json({
+          message: "Bạn không có quyền truy cập vào tài nguyên này",
+          success: false,
+        });
+      }
+      console.log("Permission granted");
+      // 5. Nếu có quyền, tiếp tục middleware tiếp theo
+      next();
+    } catch (error) {
+      console.error("Permission check error:", error);
+      return res.status(500).json({ message: "Internal server error" });
     }
-    next();
   };
 };
-export default checkPremission;
+export default checkPermission;

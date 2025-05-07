@@ -9,7 +9,7 @@ export const productController = {
     const body = req.body;
     // create
     const newProduct = await axios.post(
-      `${process.env.PRODUCT_SERVICE_URL}/create`,
+      `${process.env.PRODUCT_SERVICE_URL}/createProduct`,
       body,
       config
     );
