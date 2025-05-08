@@ -15,11 +15,6 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0, // Giá không được âm
   },
-  stock: {
-    type: Number,
-    required: true,
-    min: 0, // Tồn kho không được âm
-  },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category", // Tham chiếu đến model Category

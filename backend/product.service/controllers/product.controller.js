@@ -3,6 +3,22 @@ import { HTTP_STATUS } from "../common/http-status.common.js";
 import productService from "../service/product.service.js";
 
 export const productController = {
+
+  checkstocklistproducts: async (req, res) => {
+    const { listProduct } = req.body; 
+    const checkStock = await productService.checkstocklistproducts(
+      listProduct);
+    if (!checkStock) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: "Sản phẩm không đủ số lượng",
+        success: false,
+      });
+    }
+    return res.status(HTTP_STATUS.OK).json({
+      message: "Sản phẩm đủ số lượng",
+      success: true,
+    });
+  },
   createProduct: async (req, res) => {
     const body = req.body;
     // create

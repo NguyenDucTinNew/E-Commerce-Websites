@@ -9,20 +9,6 @@ const productService = {
     return newProduct;
   },
 
-  checkstocklistproducts: async (listProduct) => {
-    const listProductId = listProduct.map((item) => item.productId);
-    const listProductDetail = await product.find({
-      _id: { $in: listProductId },
-    });
-    if (!listProductDetail) return null;
-
-    //check stock all item in list product > 0 if got at least one item <= 0 return false
-    const checkStock = listProductDetail.every((item) => item.stock > 0);
-    if (!checkStock) return false;
-    return true;
-    
-
-  },
   getProductById: async (idProduct) => {
     const productDetail = await product
       .findById(idProduct)

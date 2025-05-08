@@ -2,14 +2,32 @@ import OrderModel from "../models/order.Model.JS";
 import OrderItemModel from "../models/orderItems.Model.JS";
 
 export const orderService = {
-  createOrder: async (orderData) => {
+  createOrderwithPendingstatus: async (orderData) => {
     try {
-      const order = await OrderModel.create(orderData);
+      const order = new OrderModel(orderData);
+      order.status = "pending"; // Set the status to pending
+      await order.save();
       return order;
     } catch (error) {
       throw new Error("Error creating order: " + error.message);
     }
   },
+  updateOrderStatus: async (orderId, status) => {
+    try {
+      const order = await OrderModel.findByIdAndUpdate(
+        orderId,
+        { status },
+        { new: true, runValidators: true }
+      );
+      if (!order) { 
+        throw new Error("Order not found");
+      }
+      return order;
+    } catch (error) {
+      throw new Error("Error updating order status: " + error.message);
+    }
+  },
+  
   deleteOrder: async (orderId) => {
     try {
       const order = await OrderModel.findByIdAndDelete(orderId);
@@ -104,7 +122,9 @@ export const orderService = {
       }, 0);
       return totalAmount;
     } catch (error) {
-      throw new Error("Error calculating total amount by user ID: " + error.message);
+      throw new Error(
+        "Error calculating total amount by user ID: " + error.message
+      );
     }
   },
   filtereorderbytime: async (order, startTime, endTime) => {
@@ -124,7 +144,7 @@ export const orderService = {
       throw new Error("Error filtering orders by time: " + error.message);
     }
   },
-filterorderbystatus: async (order, status) => {
+  filterorderbystatus: async (order, status) => {
     // i got orders and i want to filter them by status
     try {
       const filteredOrders = order.filter((order) => order.status === status);
@@ -136,7 +156,6 @@ filterorderbystatus: async (order, status) => {
       throw new Error("Error filtering orders by status: " + error.message);
     }
   },
-
 };
 
 export default orderService;
