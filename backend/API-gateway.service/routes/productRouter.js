@@ -10,43 +10,43 @@ const router = express.Router();
 router.post(
   "/createproduct",
   wrapRequestHandler(authenticate), // Kiểm tra quyền truy cập
-  wrapRequestHandler(checkPermission("67fe60e3b95566e66a97431e")), // Kiểm tra quyền truy cập
+  wrapRequestHandler(checkPermission(process.env.ROLE_ADMIN)), // Kiểm tra quyền truy cập
   wrapRequestHandler(productController.create)
 );
 router.get(
   "/getAllproduct",
   wrapRequestHandler(authenticate), // Kiểm tra quyền truy cập
-  wrapRequestHandler(checkPermission("admin")),
+  wrapRequestHandler(checkPermission(process.env.ROLE_ADMIN)),
   wrapRequestHandler(productController.fetchListProduct)
 );
 router.get(
   "/getproductById/:id",
   wrapRequestHandler(authenticate), // Kiểm tra quyền truy cập
-  wrapRequestHandler(checkPermission("admin")),
+  wrapRequestHandler(checkPermission(process.env.ROLE_ADMIN)),
   wrapRequestHandler(productController.getProductById)
 );
 router.put(
   "/updateproduct/:id",
   wrapRequestHandler(authenticate), // Kiểm tra quyền truy cập
-  wrapRequestHandler(checkPermission("admin")),
+  wrapRequestHandler(checkPermission(process.env.ROLE_ADMIN)),
   wrapRequestHandler(productController.updateProduct)
 );
 router.delete(
   "/deleteproduct/:id",
   wrapRequestHandler(authenticate), // Kiểm tra quyền truy cập
-  wrapRequestHandler(checkPermission("admin")),
+  wrapRequestHandler(checkPermission(process.env.ROLE_ADMIN)),
   wrapRequestHandler(productController.deleteProduct)
 );
 router.get(
   "/getprodutByCategory/:categoryId",
   wrapRequestHandler(authenticate), // Kiểm tra quyền truy cập
-  wrapRequestHandler(checkPermission("admin")),
+  wrapRequestHandler(checkPermission(process.env.ROLE_ADMIN)),
   wrapRequestHandler(productController.getProductByCategory)
 );
 router.get(
   "/getproductbyname/:name",
   wrapRequestHandler(authenticate), // Kiểm tra quyền truy cập
-  wrapRequestHandler(checkPermission("admin")),
+  wrapRequestHandler(checkPermission(process.env.ROLE_ADMIN)),
   wrapRequestHandler(productController.getProductByName)
 );
 

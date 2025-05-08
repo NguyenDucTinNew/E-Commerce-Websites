@@ -1,16 +1,13 @@
 import axios from "axios";
 import { HTTP_STATUS } from "../common/http-status.common.js";
 import jwt from "jsonwebtoken";
+import { getSessionIDfromToken } from "../common/getSessionIDfromToken.js";
 //import  redisconfig from "../configs/init.redis.js"; // Đảm bảo đường dẫn đúng
 //checkrole middleware
 const checkPermission = (requiredRole) => {
   return async (req, res, next) => {
     try {
-      // 1. Lấy token từ header
-      const authHeader = req.headers.authorization;
-      const token = authHeader.split(" ")[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const sessionId = decoded.sessionId;
+      const sessionId = getSessionIDfromToken(req, res); // Gọi hàm để lấy sessionId
 
       if (!sessionId) {
         return res
