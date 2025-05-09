@@ -62,5 +62,6 @@ export const orderitemsService = {
             throw new Error("Error updating order item: " + error.message);
         }
     },
+    
 };
 export default  orderitemsService;

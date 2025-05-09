@@ -2,17 +2,16 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./configs/connect-db.configs.js";
-import rootRoutes from "./routes/index.js";
+import rootRoutes from "./router/inventory.router.js";
 import morgan from "morgan";
 
 dotenv.config();
 const app = express();
 app.use(morgan("dev"));
 
-// Middleware
+// Middlewarenpm
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 
 app.use(
   cors({

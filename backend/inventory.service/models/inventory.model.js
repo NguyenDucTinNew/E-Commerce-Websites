@@ -8,14 +8,17 @@ const inventorySchema = new mongoose.Schema({
     unique: true, // Đảm bảo mỗi sản phẩm chỉ có một bản ghi tồn kho
   },
   // Số lượng tồn kho của sản phẩm
-  Actualstock: {
+  actualStock: {
     type: Number,
     required: true,
-    min: 0,
+    min: 1,
   },
-  reserstock: {
+  reserStock: {
     type: Number,
     default: 0, // Số lượng đã đặt trước nhưng chưa giao hàng
+  },
+  avaliableStock: {
+    type: Number,
   },
   // Các trường khác liên quan đến tồn kho (ví dụ: vị trí kho, lô hàng, v.v.)
   location: {

@@ -180,3 +180,4 @@ export const updateUser = async (req, res) => {
     data: userupdate,
   });
 };
+
