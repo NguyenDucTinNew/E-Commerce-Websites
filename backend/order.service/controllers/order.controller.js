@@ -3,21 +3,18 @@ import { HTTP_STATUS } from "../common/http-status.common.js";
 
 export const orderController = {
   createCart: async (req, res) => {
-  
-    const body = req.body;
-    const result = await orderService.createCart(body.userID);
+    const userid = req.params.userId;
+    const result = await orderService.createCart(userid);
     if (!result)
-      return res.status(HTTP_STATUS.BAD_REQUEST).JSON({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
         succes: false,
         message: "Tạo giỏ hàng thất bại",
       });
-    else
-      return res.status(HTTP_STATUS.OK).JSON({
-        succes: true,
-        message: "Tạo giỏ hàng thành công",
-      });
-  
-    
+    else console.log("tới đây rùi");
+    return res.status(HTTP_STATUS.CREATED).json({
+      succes: true,
+      message: "Tạo giỏ hàng thành công",
+    });
   },
 };
 

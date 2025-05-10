@@ -6,8 +6,6 @@ import { isAuthenticated } from "../../../user.service/middlewares/authMiddlewar
 import jwt from "jsonwebtoken";
 import redisConfig from "../../../user.service/configs/init.redis.js"; // Đảm bảo đường dẫn đúng
 
-
-
 dotenv.config();
 
 // const redisClient = redisConfig.getRedis(); // Lấy client Redis
@@ -26,7 +24,7 @@ export const authController = {
         message: "Đăng nhập thất bại",
         success: false,
       });
-   
+
     return res.status(HTTP_STATUS.OK).json({
       message: "Đăng nhập thành công",
       sucess: true,
@@ -36,22 +34,33 @@ export const authController = {
   //Register for customer
   register: async (req, res) => {
     const body = req.body;
-    const result = await axios.post(
+    const newaccount = await axios.post(
       `${process.env.USER_SERVICE_URL}/register`,
       body,
       config
     );
-    console.log("Response data:", result.data);
-    console.log("Response headers:", result.headers);
-    if (!result)
+    console.log("Response data:", newaccount.data);
+    console.log("Response headers:", newaccount.headers);
+    if (!newaccount)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         message: "Đăng ký thất bại!",
         success: false,
       });
+    console.log(newaccount.data.user);
+    const userid = newaccount.data.user._id;
+    console.log("undefine ne", userid);
+    const newcart = await axios.post(
+      `${process.env.ORDER_SERVICE_URL}/createCart/${userid}`,
+      body,
+      config
+    );
+    if (newcart) {
+      console.log("Tao gio hang thanh cong");
+    }
     return res.status(HTTP_STATUS.CREATED).json({
       message: "Đăng ký thành công",
       success: true,
-      data: result.data,
+      data: newcart.data,
     });
   },
   getSessionRole: async (req, res) => {

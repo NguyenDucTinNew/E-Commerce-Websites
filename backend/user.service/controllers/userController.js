@@ -33,14 +33,18 @@ export const register = async (req, res) => {
       role: "67fe60dab95566e66a97431c", // Lưu ID của role
     });
 
-    console.log("New User Created:", {
-      username,
-      email,
-    });
+    const userForResponse = {
+      _id: newUser._id, // Bao gồm _id
+      username: newUser.username,
+      email: newUser.email,
+      // KHÔNG bao gồm password hoặc hashedPassword
+    };
     await newUser.save();
-    res
-      .status(HTTP_STATUS.CREATED)
-      .json({ message: "User registered successfully", success: true });
+    res.status(HTTP_STATUS.CREATED).json({
+      message: "User registered successfully",
+      success: true,
+      user: userForResponse,
+    });
   } catch (err) {
     console.error(err);
     res
@@ -180,4 +184,3 @@ export const updateUser = async (req, res) => {
     data: userupdate,
   });
 };
-
