@@ -3,9 +3,8 @@ import * as dotenv from "dotenv";
 import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import connectDB from "./configs/connect-db.configs.js";
-import orderRouter from "./routes";
+import orderRouter from "./routes/order.router.js";
 import morgan from "morgan";
-import session from "express-session";
 
 dotenv.config();
 const app = express();

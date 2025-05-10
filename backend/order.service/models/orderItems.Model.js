@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 const OrderItemSchema = new mongoose.Schema({
   itemId: {

@@ -1,9 +1,8 @@
 {
   "name": "order.service",
   "version": "1.0.0",
-  "description": "order service",
   "type": "module",
-  "main": "server.js",
+   "main": "server.js",
   "scripts": {
     "dev": "nodemon ./server.js"
   },

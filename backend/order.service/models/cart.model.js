@@ -6,15 +6,18 @@ const CartSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  creatAt:{
-   type : Date.now()
+  creatAt: {
+    type: Date,
+    default: Date.now,
   },
-  listProduct: [{
-  type: mongoose.Schema.Types.ObjectId,
-    ref: "OrderItem",   
-  }]  ,
+  listProduct: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "OrderItem",
+    },
+  ],
 });
 
 CartSchema.plugin(mongoosePaginate);
-const OrderModel = mongoose.model("Order", CartSchema);
+const OrderModel = mongoose.model("Cart", CartSchema);
 export default OrderModel;

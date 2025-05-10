@@ -1,6 +1,6 @@
-import OrderModel from "../models/order.Model.JS";
-import OrderItemModel from "../models/orderItems.Model.JS";
-import CartModel from "../models/cart.model";
+import OrderModel from "../models/order.model.js";
+import OrderItemModel from "../models/orderItems.model.js";
+import CartModel from "../models/cart.model.js";
 
 export const orderService = {
   createCart: async (userid) => {
@@ -65,6 +65,7 @@ export const orderService = {
       throw new Error("Error fetching order: " + error.message);
     }
   },
+  /*
   getAllOrders: async (query) => {
     try {
       const { page = 1, limit = 10 } = query;
@@ -79,6 +80,7 @@ export const orderService = {
       throw new Error("Error fetching orders: " + error.message);
     }
   },
+  */
   updateOrder: async (orderId, orderData) => {
     try {
       const order = await OrderModel.findByIdAndUpdate(orderId, orderData, {

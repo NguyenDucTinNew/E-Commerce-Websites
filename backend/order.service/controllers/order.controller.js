@@ -1,20 +1,23 @@
-import orderService from "../service/order.service";
+import { orderService } from "../service/order.service.js";
+import { HTTP_STATUS } from "../common/http-status.common.js";
 
 export const orderController = {
   createCart: async (req, res) => {
-    const userid = req.userid;
-    const result = await orderService.createCart(userid);
-
+  
+    const body = req.body;
+    const result = await orderService.createCart(body.userID);
     if (!result)
-      return {
-        succes: true,
-        message: " Tạo giỏ hàng thành công",
-      };
-    else
-      return {
+      return res.status(HTTP_STATUS.BAD_REQUEST).JSON({
         succes: false,
-        message: "Tạo giỏ hàng thaasrt bại",
-      };
+        message: "Tạo giỏ hàng thất bại",
+      });
+    else
+      return res.status(HTTP_STATUS.OK).JSON({
+        succes: true,
+        message: "Tạo giỏ hàng thành công",
+      });
+  
+    
   },
 };
 
