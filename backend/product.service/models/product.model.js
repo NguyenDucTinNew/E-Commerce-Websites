@@ -2,11 +2,6 @@ import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
 const productSchema = new mongoose.Schema({
-  productId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   name: {
     type: String,
     required: true,
@@ -20,10 +15,9 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0, // Giá không được âm
   },
-  stock: {
+  quanlyti: {
     type: Number,
-    required: true,
-    min: 0, // Tồn kho không được âm
+    require: true,
   },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,

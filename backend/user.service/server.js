@@ -23,7 +23,7 @@ redisConfig.initRedis();
 // Create Redis store
 const redisStore = new RedisStore({
   client: redisConfig.getRedis(), // Your Redis client
-  prefix: "mysession", // Optional key prefix
+  prefix: "mysession:", // Optional key prefix
   ttl: 86400, // Session TTL in seconds (optional)
 });
 // express-session settings
@@ -47,6 +47,7 @@ app.use(passport.session());
 
 app.use(
   cors({
+    exposedHeaders: ["Authorization"],
     origin: [
       "http://localhost:3000",
       "http://localhost:4200",
@@ -61,16 +62,21 @@ app.use(
 // Database connection
 connectDB();
 
-// Routes
-app.get("/getsession", (req, res) => {
-  res.send(req.session);
-});
-
 app.use(`/api/v1`, userRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log("🚀 Server running on port:", port);
+});
+// Trong user.service (test route)
+app.get("/test-redis", async (req, res) => {
+  try {
+    const redisClient = redisConfig.getRedis(); // Lấy client Redis
+    const value = await redisClient.get("taolaai"); // Đọc key từ Redis
+    res.json({ success: !!value, value });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Đóng kết nối Redis khi ứng dụng dừng

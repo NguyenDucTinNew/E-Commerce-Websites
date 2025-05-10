@@ -1,5 +1,5 @@
 {
-  "name": "deliver.service",
+  "name": "product.service",
   "version": "1.0.0",
   "description": "product service",
   "type": "module",
@@ -13,7 +13,6 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
-    "deliver.service": "file:",
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
