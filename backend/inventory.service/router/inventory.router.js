@@ -5,8 +5,10 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/create",
-    wrapRequestHandler(inventoryMiddleware)
-    , wrapRequestHandler(inventoryController.createInventory));
-    
+router.post(
+  "/createinventory",
+  wrapRequestHandler(inventoryMiddleware),
+  wrapRequestHandler(inventoryController.createInventory)
+);
+
 export default router;

@@ -9,8 +9,7 @@ const OrderSchema = new mongoose.Schema({
   }, // ID của đơn hàng
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Tham chiếu đến model Category
-    required: true,
+    ref: "User",
   }, // ID của người dùng
   items: [
     {

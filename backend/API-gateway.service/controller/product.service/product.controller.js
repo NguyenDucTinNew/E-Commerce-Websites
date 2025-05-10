@@ -18,12 +18,19 @@ export const productController = {
         message: "Tạo sản phẩm thất bại",
         success: false,
       });
+    else {
       
-    return res.status(HTTP_STATUS.OK).json({
-      message: "Tạo sản phẩm thành công!",
-      success: true,
-      data: newProduct.data,
-    });
+      const newInventory = await axios.post(
+        `${process.env.INVENTORY_SERVICE_URL}/createinventory`,
+        body,
+        config
+      );
+      return res.status(HTTP_STATUS.OK).json({
+        message: "Tạo sản phẩm thành công!",
+        success: true,
+        data: newProduct.data,
+      });
+    }
   },
   //get product
   getProductById: async (req, res) => {

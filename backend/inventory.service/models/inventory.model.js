@@ -19,6 +19,7 @@ const inventorySchema = new mongoose.Schema({
   },
   avaliableStock: {
     type: Number,
+
   },
   // Các trường khác liên quan đến tồn kho (ví dụ: vị trí kho, lô hàng, v.v.)
   location: {

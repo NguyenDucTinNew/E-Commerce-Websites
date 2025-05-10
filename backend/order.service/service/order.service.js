@@ -1,7 +1,21 @@
 import OrderModel from "../models/order.Model.JS";
 import OrderItemModel from "../models/orderItems.Model.JS";
+import CartModel from "../models/cart.model";
 
 export const orderService = {
+  createCart: async (userid) => {
+    const newcart = await OrderModel.create({
+      userid: userid,
+      listProduct: [],
+    });
+
+    if (newcart) {
+      newcart.save();
+      return { succes: true, message: "Tao gio hang thanh cong" };
+    }
+    return { succes: false, message: "Tao gio hang that bai" };
+  },
+
   createOrderwithPendingstatus: async (orderData) => {
     try {
       const order = new OrderModel(orderData);
@@ -9,7 +23,8 @@ export const orderService = {
       await order.save();
       return order;
     } catch (error) {
-      throw new Error("Error creating order: " + error.message);
+      console.log(error);
+      throw new Error("Error order failed");
     }
   },
   updateOrderStatus: async (orderId, status) => {
@@ -19,7 +34,7 @@ export const orderService = {
         { status },
         { new: true, runValidators: true }
       );
-      if (!order) { 
+      if (!order) {
         throw new Error("Order not found");
       }
       return order;
@@ -27,7 +42,7 @@ export const orderService = {
       throw new Error("Error updating order status: " + error.message);
     }
   },
-  
+
   deleteOrder: async (orderId) => {
     try {
       const order = await OrderModel.findByIdAndDelete(orderId);
