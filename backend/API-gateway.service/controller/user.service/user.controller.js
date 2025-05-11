@@ -22,9 +22,7 @@ export const userController = {
   },
   getProfile: async (req, res) => {
     const { idUser } = req.params;
-    const result = await axios.get(
-      `${process.env.USER_SERVICE_URL}/userbyid/${idUser}`
-    );
+    const result = await axios.get(`${process.env.USER_SERVICE_URL}/profile`);
     if (!result)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         message: "Không thể tải dữ liệu người dùng!",

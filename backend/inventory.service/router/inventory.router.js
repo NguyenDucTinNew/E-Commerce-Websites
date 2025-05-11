@@ -6,7 +6,7 @@ import express from "express";
 const router = express.Router();
 
 router.post(
-  "/createinventory",
+  "/inventory/createinventory",
   wrapRequestHandler(inventoryMiddleware),
   wrapRequestHandler(inventoryController.createInventory)
 );
