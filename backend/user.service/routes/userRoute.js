@@ -22,12 +22,12 @@ const router = express.Router();
 
 // Đăng ký người dùng
 router.post(
-  "/register",
+  "/user/register",
   wrapRequestHandler(authMiddleware), // Kiểm tra dữ liệu đầu vào
   wrapRequestHandler(register) // Đăng ký người dùng
 );
 // user.routes.js
-router.post("/login", (req, res, next) => {
+router.post("/user/login", (req, res, next) => {
   passport.authenticate("local", async (err, user, info) => {
     if (err) return next(err);
     if (!user) {
@@ -83,7 +83,7 @@ router.post("/login", (req, res, next) => {
 
 // Lấy thông tin profile người dùng
 router.get(
-  "/profile",
+  "/user/profile",
   wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
   wrapRequestHandler(getProfile) // Lấy thông tin profile
 );
@@ -95,38 +95,38 @@ router.get(
 );
 */
 router.post(
-  "/forgotPassword",
+  "/user/forgotPassword",
   wrapRequestHandler(finduseraccount) // Kiểm tra dữ liệu đầu vào
 );
 // change password
 router.post(
-  "/changepassword",
+  "/user/changepassword",
   wrapRequestHandler(changePassword) // Đổi mật khẩu
 );
 //get all user
 router.get(
-  "/getallusers",
+  "/user/getallusers",
   wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
   wrapRequestHandler(getLisUser) // Lấy tất cả người dùng
 );
 // Đăng xuất người dùng
 router.get(
-  "/getuserbyid/:userid",
+  "/user/getuserbyid/:userid",
   wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
   wrapRequestHandler(getuserbyId)
 );
 router.delete(
-  "/deleteuser/:userid",
+  "/user/deleteuser/:userid",
   wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
   wrapRequestHandler(deleteUser)
 );
 router.put(
-  "/updateuser/:userid",
+  "/user/updateuser/:userid",
   wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
   wrapRequestHandler(authMiddleware), // Kiểm tra dữ liệu đầu vào
   wrapRequestHandler(updateUser) // Cập nhật thông tin người dùng
 );
-router.get("/getRoleFromRedis/:sessionId", async (req, res) => {
+router.get("/user/getRoleFromRedis/:sessionId", async (req, res) => {
   //get role from redis with key userRole
   const { sessionId } = req.params; // Lấy session ID từ request params
   const sessionDatastring = await redisConfig.getRedis().get(sessionId); // Hàm để lấy session từ Redis
@@ -137,13 +137,13 @@ router.get("/getRoleFromRedis/:sessionId", async (req, res) => {
     res.json({ role: sessionData.role }); // Trả lại thông tin role
   }
 });
-router.get("/getSessionID", (req, res) => {
+router.get("/user/getSessionID", (req, res) => {
   console.log("Request sessionID:", req.sessionID);
   const sessionId = req.sessionID; // Lấy session ID từ request
   console.log("sessionId", sessionId); // In ra session ID để kiểm tra
   res.json({ sessionId }); // Trả về session ID cho client
 });
-router.get("/isAuthenticated", async (req, res) => {
+router.get("/user/isAuthenticated", async (req, res) => {
   const sessionId = req.sessionID; // Lấy session ID từ request
   const sessionData = await redisConfig.getRedis().get(sessionId);
 
@@ -153,7 +153,7 @@ router.get("/isAuthenticated", async (req, res) => {
     return res.status(404).json({ success: false }); // Trả về false nếu không
   }
 });
-router.get("/userbyid/:userid", (req, res) => {
+router.get("/user/userbyid/:userid", (req, res) => {
   const { userid } = req.params;
   console.log("userid", userid); // In ra userid để kiểm tra
   res.json({ userid }); // Trả về userid cho client

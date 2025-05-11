@@ -4,7 +4,6 @@ import CartModel from "../models/cart.model.js";
 
 export const orderService = {
   createCart: async (userid) => {
-    console.log("Đang tạo cart cho userId:", userid);
     const newcart = await CartModel.create({
       userId: userid,
       listProduct: [],

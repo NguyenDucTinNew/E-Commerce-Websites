@@ -7,22 +7,6 @@ export const register = async (req, res) => {
   const { username, password, email } = req.body;
 
   try {
-    // Kiểm tra sự tồn tại của tên người dùng
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res
-        .status(HTTP_STATUS.BAD_REQUEST)
-        .json({ message: "Username already exists", success: false });
-    }
-
-    // Kiểm tra sự tồn tại của email
-    const existingEmail = await User.findOne({ email });
-    if (existingEmail) {
-      return res
-        .status(HTTP_STATUS.BAD_REQUEST)
-        .json({ message: "Email already exists", success: false });
-    }
-
     // Mã hóa password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -31,7 +15,7 @@ export const register = async (req, res) => {
       email,
       password: hashedPassword,
       role: "67fe60dab95566e66a97431c", // Lưu ID của role
-    });
+    }); 
 
     const userForResponse = {
       _id: newUser._id, // Bao gồm _id

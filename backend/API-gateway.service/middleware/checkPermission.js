@@ -21,6 +21,26 @@ const checkPermission = (requiredRole) => {
       );
 
       const userRole = response.data.role;
+      const requestedService = req.baseUrl.replace("/api/v1/", ""); // 'order', 'user', etc.
+      const routePath = req.route.path; // '/create', '/delete/:id'
+      const method = req.method; // GET, POST, etc.
+
+      // Tạo route key theo format 'service:method:path'
+      const routeKey = `${requestedService}:${method.toLowerCase()}${routePath}`
+        .replace(/\/:(\w+)/g, "") // Bỏ param
+        .replace(/\//g, ":");
+
+      console.log(
+        `Checking permission for route: ${routeKey}, role: ${userRole}`
+      );
+
+      // Kiểm tra quyền
+      if (!checkRoutePermission(routeKey, userRole)) {
+        return res.status(403).json({
+          message: "Bạn không có quyền truy cập vào tài nguyên này",
+          success: false,
+        });
+      }
       console.log("User role:", userRole);
 
       // 4. Kiểm tra quyền

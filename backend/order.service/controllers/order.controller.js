@@ -10,7 +10,6 @@ export const orderController = {
         succes: false,
         message: "Tạo giỏ hàng thất bại",
       });
-    else console.log("tới đây rùi");
     return res.status(HTTP_STATUS.CREATED).json({
       succes: true,
       message: "Tạo giỏ hàng thành công",

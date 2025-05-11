@@ -33,35 +33,71 @@ export const authController = {
   },
   //Register for customer
   register: async (req, res) => {
-    const body = req.body;
-    const newaccount = await axios.post(
-      `${process.env.USER_SERVICE_URL}/register`,
-      body,
-      config
-    );
-    console.log("Response data:", newaccount.data);
-    console.log("Response headers:", newaccount.headers);
-    if (!newaccount)
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        message: "Đăng ký thất bại!",
+    try {
+      const body = req.body;
+      // 1. Gọi User Service - KHÔNG dùng .catch() ở đây
+      let userResponse;
+      try {
+        userResponse = await axios.post(
+          `${process.env.USER_SERVICE_URL}/register`,
+          body,
+          config
+        );
+      } catch (error) {
+        // Nếu User Service trả về lỗi
+        if (error.response) {
+          return res.status(error.response.status).json({
+            message: error.response.data.message || "Đăng ký thất bại",
+            success: false,
+            errors: error.response.data.errors,
+          });
+        }
+        // Nếu không kết nối được với User Service
+        return res.status(HTTP_STATUS.SERVICE_UNAVAILABLE).json({
+          message: "Không thể kết nối với User Service",
+          success: false,
+        });
+      }
+
+      const userId = userResponse.data.user._id;
+      let cartResponse;
+      // 3. Tạo giỏ hàng
+      try {
+        cartResponse = await axios.post(
+          `${process.env.ORDER_SERVICE_URL}/createCart/${userId}`,
+          { userId },
+          config
+        );
+
+        return res.status(HTTP_STATUS.CREATED).json({
+          message: "Đăng ký thành công",
+          success: true,
+          user: userResponse.data.user,
+          cart: cartResponse.data,
+        });
+      } catch (cartError) {
+        // Rollback: Xóa user nếu tạo cart thất bại
+        try {
+          await axios.delete(
+            `${process.env.USER_SERVICE_URL}/users/${userId}`,
+            config
+          );
+        } catch (deleteError) {
+          console.error("Lỗi khi xóa user rollback:", deleteError);
+        }
+
+        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+          message: "Tạo giỏ hàng thất bại, đã hủy tài khoản",
+          success: false,
+        });
+      }
+    } catch (error) {
+      console.error("Lỗi Gateway không xác định:", error);
+      return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        message: "Lỗi hệ thống",
         success: false,
       });
-    console.log(newaccount.data.user);
-    const userid = newaccount.data.user._id;
-    console.log("undefine ne", userid);
-    const newcart = await axios.post(
-      `${process.env.ORDER_SERVICE_URL}/createCart/${userid}`,
-      body,
-      config
-    );
-    if (newcart) {
-      console.log("Tao gio hang thanh cong");
     }
-    return res.status(HTTP_STATUS.CREATED).json({
-      message: "Đăng ký thành công",
-      success: true,
-      data: newcart.data,
-    });
   },
   getSessionRole: async (req, res) => {
     const sessionrole = await axios.get(
