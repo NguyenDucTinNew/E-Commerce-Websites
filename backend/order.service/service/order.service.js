@@ -1,5 +1,5 @@
 import OrderModel from "../models/order.model.js";
-import OrderItemModel from "../models/orderItems.model.js";
+
 import CartModel from "../models/cart.model.js";
 import mongoose from "mongoose";
 export const orderService = {

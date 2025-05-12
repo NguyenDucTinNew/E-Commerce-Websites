@@ -1,24 +1,28 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
-const categorySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  Images: [
-    {
-      url: {
-        type: String,
-      },
-      public_id: {
-        type: String,
-      },
+const categorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
     },
-  ],
-  timestamps: true,
-});
+    Images: [
+      {
+        url: {
+          type: String,
+        },
+        public_id: {
+          type: String,
+        },
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 // Cập nhật updatedAt trước khi lưu
 categorySchema.pre("save", function (next) {
