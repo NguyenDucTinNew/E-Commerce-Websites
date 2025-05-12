@@ -23,10 +23,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user", // Giá trị mặc định là "user"
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  timestamps: true,
 });
 userSchema.plugin(mongoosePaginate);
 // Tạo model từ schema

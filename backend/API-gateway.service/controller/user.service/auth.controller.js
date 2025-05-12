@@ -5,6 +5,7 @@ import * as dotenv from "dotenv";
 import { isAuthenticated } from "../../../user.service/middlewares/authMiddleware.js";
 import jwt from "jsonwebtoken";
 import redisConfig from "../../../user.service/configs/init.redis.js"; // Đảm bảo đường dẫn đúng
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -79,7 +80,7 @@ export const authController = {
         // Rollback: Xóa user nếu tạo cart thất bại
         try {
           await axios.delete(
-            `${process.env.USER_SERVICE_URL}/users/${userId}`,
+            `${process.env.USER_SERVICE_URL}/deleteuser/${userId}`,
             config
           );
         } catch (deleteError) {

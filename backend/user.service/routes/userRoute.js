@@ -117,7 +117,7 @@ router.get(
 );
 router.delete(
   "/deleteuser/:userid",
-  wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
+ // wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
   wrapRequestHandler(deleteUser)
 );
 router.put(

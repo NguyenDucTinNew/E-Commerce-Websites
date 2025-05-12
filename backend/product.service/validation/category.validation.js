@@ -9,8 +9,6 @@ export const categoryValidation = joi.object({
     joi.object({
       url: joi.string().uri(),
       public_id: joi.string(),
-    }),
+    })
   ),
-  createdAt: joi.date().optional(),
-  updatedAt: joi.date().optional(),
 });

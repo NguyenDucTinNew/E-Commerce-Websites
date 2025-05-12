@@ -1,6 +1,7 @@
 import product from "../models/product.model.js";
 import { HTTP_STATUS } from "../common/http-status.common.js";
 import Category from "../models/category.model.js";
+import mongoose from "mongoose";
 
 const productService = {
   createProduct: async (body) => {
@@ -31,11 +32,16 @@ const productService = {
     return updatedProduct;
   },
 
-  deleteProduct: async (idProduct) => {
-    const deletedProduct = await product.findByIdAndDelete(idProduct);
-    if (!deletedProduct) return null;
-    return deletedProduct;
-  },
+deleteProduct: async (idProduct) => {
+  try {
+    const objectId = new mongoose.Types.ObjectId(idProduct); // Chuyển đổi
+    const result = await product.findByIdAndDelete(objectId);
+    return result;
+  } catch (error) {
+    console.error("Lỗi trong productService.deleteProduct:", error);
+    throw error; // Ném lỗi để controller xử lý
+  }
+},
   getproductbyname: async (name) => {
     const productDetail = await product.find({ name: { $regex: name } });
     if (!productDetail) return null;

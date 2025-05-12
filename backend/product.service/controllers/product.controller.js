@@ -1,13 +1,12 @@
 //import product from "../model/product.model.js";
 import { HTTP_STATUS } from "../common/http-status.common.js";
 import productService from "../service/product.service.js";
+import mongoose from "mongoose";
 
 export const productController = {
-
   checkstocklistproducts: async (req, res) => {
-    const { listProduct } = req.body; 
-    const checkStock = await productService.checkstocklistproducts(
-      listProduct);
+    const { listProduct } = req.body;
+    const checkStock = await productService.checkstocklistproducts(listProduct);
     if (!checkStock) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         message: "Sản phẩm không đủ số lượng",
@@ -28,11 +27,13 @@ export const productController = {
         message: "Tạo sản phẩm thất bại",
         success: false,
       });
-
+    const idproductRespone = {
+      _id: newProduct._id,
+    };
     return res.status(HTTP_STATUS.OK).json({
       message: "Tạo sản phẩm thành công!",
       success: true,
-      data: newProduct,
+      idproductRespone: idproductRespone,
     });
   },
   //get product
@@ -86,11 +87,14 @@ export const productController = {
   },
   //delete product
   deleteProduct: async (req, res) => {
-    const { idProduct } = req.params;
+    console.log("Hàm deleteProduct được gọi!");
+    console.log("req.params:", req.params);
+
+    const idProduct = new mongoose.Types.ObjectId(req.params.id);
     //delete
     const result = await productService.deleteProduct(idProduct);
     if (!result)
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
         message: "Xóa sản phẩm thất bại",
         success: false,
       });

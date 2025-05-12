@@ -19,16 +19,12 @@ const inventorySchema = new mongoose.Schema({
   },
   avaliableStock: {
     type: Number,
-
   },
   // Các trường khác liên quan đến tồn kho (ví dụ: vị trí kho, lô hàng, v.v.)
   location: {
     type: String, // Ví dụ: "Kho A", "Chi nhánh Hà Nội"
   },
-  lastUpdated: {
-    type: Date,
-    default: Date.now,
-  },
+  timestamps: true,
 });
 
 // Cập nhật lastUpdated trước khi lưu

@@ -6,6 +6,6 @@ const router = express.Router();
 
 const rootRoutes = [categoryRoutes, productRoutes];
 rootRoutes.map((route) => {
-  router.use(route);
+router.use(route);
 });
 export default rootRoutes;

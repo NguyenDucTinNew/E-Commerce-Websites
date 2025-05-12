@@ -2,34 +2,76 @@ import axios from "axios";
 import config from "../../config.js";
 import * as dotenv from "dotenv";
 import { HTTP_STATUS } from "../../common/http-status.common.js";
+import { json } from "express";
 dotenv.config();
 
 export const productController = {
   create: async (req, res) => {
-    const body = req.body;
-    // create
-    const newProduct = await axios.post(
-      `${process.env.PRODUCT_SERVICE_URL}/createProduct`,
-      body,
-      config
-    );
-    if (!newProduct)
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        message: "Tạo sản phẩm thất bại",
-        success: false,
-      });
-    else {
-      
-      const newInventory = await axios.post(
-        `${process.env.INVENTORY_SERVICE_URL}/createinventory`,
-        body,
-        config
+    try {
+      const body = req.body;
+      // create
+      let newProduct;
+      try {
+        newProduct = await axios.post(
+          `${process.env.PRODUCT_SERVICE_URL}/createProduct`,
+          body,
+          config
+        );
+      } catch (productError) {
+        // Nếu User Service trả về lỗi
+        if (productError.response) {
+          res.status(productError.response.status).json({
+            message:
+              productError.response.data.message || "Tạo sản phẩm thất bại",
+            success: false,
+            errors: productError.response.data.errors,
+          });
+        }
+      }
+      const productId = newProduct.data.idproductRespone._id;
+      let newInventory;
+      try {
+        newInventory = await axios.post(
+          `${process.env.INVENTORY_SERVICE_URL}/createinventory`,
+          body,
+          config
+        );
+
+        return res.status(HTTP_STATUS.CREATED).json({
+          message: "Tạo sản phẩm thành công ",
+          success: true,
+        });
+      } catch (inventoryError) {
+        try {
+          await axios.delete(
+            `${process.env.PRODUCT_SERVICE_URL}/delete/${productId}`,
+            { productId },
+            config
+            /*
+            router.delete(
+              "/delete/:id",
+              wrapRequestHandler(productController.deleteProduct)
+            );
+            */
+          );
+        } catch (productDelError) {
+          console.log("Rollback Failed");
+        }
+        return res.status(error.response.status).json({
+          message:
+            inventoryError.response.data.message || "Tạo sản phẩm thất bại",
+          success: false,
+          errors: inventoryError.response.data.errors,
+        });
+      }
+    } catch {
+      return (
+        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR),
+        json({
+          message: "Lỗi hệ thống ",
+          success: false,
+        })
       );
-      return res.status(HTTP_STATUS.OK).json({
-        message: "Tạo sản phẩm thành công!",
-        success: true,
-        data: newProduct.data,
-      });
     }
   },
   //get product

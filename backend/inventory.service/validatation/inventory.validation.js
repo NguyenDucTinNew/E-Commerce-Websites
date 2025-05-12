@@ -36,5 +36,4 @@ export const inventoryValidation = joi.object({
     "string.max": "location không được vượt quá 200 ký tự",
     "string.base": "location phải là một chuỗi",
   }),
-  lastUpdated: joi.date().optional(),
 });

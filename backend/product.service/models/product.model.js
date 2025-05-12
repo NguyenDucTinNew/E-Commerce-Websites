@@ -28,14 +28,7 @@ const productSchema = new mongoose.Schema({
     type: [String], // Danh sách URL hình ảnh
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
+  timestamps: true,
 });
 
 // Cập nhật updatedAt trước khi lưu

@@ -31,7 +31,7 @@ app.use(
 // Kết nối đến cơ sở dữ liệu
 connectDB();
 // Định nghĩa routes
-app.use(`/api/v1`, rootRoutes);
+app.use("/api/v1", rootRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

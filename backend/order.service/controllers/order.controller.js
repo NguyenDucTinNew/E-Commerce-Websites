@@ -1,9 +1,9 @@
 import { orderService } from "../service/order.service.js";
 import { HTTP_STATUS } from "../common/http-status.common.js";
-
+import mongoose from "mongoose";
 export const orderController = {
   createCart: async (req, res) => {
-    const userid = req.params.userId;
+    const userid = new mongoose.Types.ObjectId(req.params.userid);
     const result = await orderService.createCart(userid);
     if (!result)
       return res.status(HTTP_STATUS.BAD_REQUEST).json({

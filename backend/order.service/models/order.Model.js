@@ -1,45 +1,64 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
-const OrderSchema = new mongoose.Schema({
-  orderId: {
-    type: String,
-    required: true,
-    unique: true,
-  }, // ID của đơn hàng
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  }, // ID của người dùng
-  items: [
-    {
+const OrderSchema = new mongoose.Schema(
+  {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "OrderItem",
+      ref: "User",
       required: true,
     },
-  ], // Tham chiếu đến các mặt hàng
-  totalAmount: {
-    type: Number,
-    required: true,
-  }, // Tổng số tiền
-  status: {
-    type: String,
-    enum: ["pending", "completed", "canceled"],
-    default: "pending",
-  }, // Trạng thái
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  }, // Ngày tạo
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  }, // Ngày cập nhật
-});
-OrderSchema.pre("save", function (next) {
-  this.updatedAt = Date.now(); // Cập nhật ngày cập nhật trước khi lưu
-  next();
-});
+    items: [
+      {
+        itemId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    orderDate: {
+      type: Date,
+      default: Date.now,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "Paid", "cancelled", "shipping", "completed"],
+      default: "pending",
+    },
+    shippingAddress: {
+      type: String,
+    },
+    paymentMethod: {
+      type: String,
+    },
+    orderType: {
+      type: String,
+      enum: ["online", "offline"],
+      default: "online",
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 OrderSchema.plugin(mongoosePaginate);
-const OrderModel = mongoose.model("Order", OrderSchema);
-export default OrderModel;
+const Order = mongoose.model("Order", OrderSchema);
+export default Order;

@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import { HTTP_STATUS } from "../common/http-status.common.js"; // Import mã trạng thái HTTP
 import { userService } from "../services/user.service.js";
-
+import mongoose from "mongoose";
 export const register = async (req, res) => {
   const { username, password, email } = req.body;
 
@@ -15,7 +15,7 @@ export const register = async (req, res) => {
       email,
       password: hashedPassword,
       role: "67fe60dab95566e66a97431c", // Lưu ID của role
-    }); 
+    });
 
     const userForResponse = {
       _id: newUser._id, // Bao gồm _id
@@ -138,7 +138,8 @@ export const getLisUser = async (req, res) => {
   });
 };
 export const deleteUser = async (req, res) => {
-  const { userid } = req.param;
+  console.log(req.params);  
+  const userid = new mongoose.Types.ObjectId(req.params.userid);
   const user = await userService.deleteUser(userid); //delete user by id
   if (!user) {
     return res.status(HTTP_STATUS.NOT_FOUND).json({
