@@ -9,7 +9,7 @@ export const productController = {
   create: async (req, res) => {
     try {
       const body = req.body;
-      // create
+      // thực hiện tìm trc nếu không có thì là cái ở dưới nếu có thì thực hiện updatekho
       let newProduct;
       try {
         newProduct = await axios.post(

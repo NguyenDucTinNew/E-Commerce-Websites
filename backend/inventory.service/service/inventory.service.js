@@ -65,6 +65,20 @@ export const inventoryService = {
       return { success: false, message: error.message };
     }
   },
+  // Inventory Service
+  updateInventory: async (productId, quantityToAdd) => {
+    const inventory = await inventoryModel.findOne({ productId });
+
+    if (!inventory) {
+      throw new Error(`Inventory not found for product ID: ${productId}`);
+    }
+
+    inventory.actualStock += quantityToAdd;
+    inventory.avaliableStock += quantityToAdd; // Hoặc điều chỉnh theo logic nghiệp vụ
+    await inventory.save();
+
+    return inventory;
+  },
   // Bỏ hàng vào cart chứ chưa mua
   ReserveItemsbyListProducts: async (listproduct) => {
     try {

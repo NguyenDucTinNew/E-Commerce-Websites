@@ -4,5 +4,8 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/createCart/:userid", wrapRequestHandler(orderController.createCart));
+router.post(
+  "/createCart/:userid",
+  wrapRequestHandler(orderController.createCart)
+);
 export default router;

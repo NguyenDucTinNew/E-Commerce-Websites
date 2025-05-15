@@ -1,22 +1,26 @@
 import mongoose from "mongoose";
+import _ from "mongoose-paginate-v2";
 import mongoosePaginate from "mongoose-paginate-v2";
 
 const CartSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
+      require: true,
     },
     items: [
       {
         itemId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product", // Tham chiếu đến model Product
+          type: String,
+          require: true,
         },
         quantity: {
           type: Number,
         },
         price: {
+          type: Number,
+        },
+        total: {
           type: Number,
         },
       },

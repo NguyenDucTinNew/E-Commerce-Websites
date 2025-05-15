@@ -1,5 +1,5 @@
 import Cart from "../models/cart.model.js";
-
+import mongoose from "mongoose";
 export const CartService = {
   // 1. Tạo mới hoặc cập nhật giỏ hàng
   upsertCart: async ({ userId, items }) => {
@@ -23,25 +23,25 @@ export const CartService = {
 
   // 2. Thêm sản phẩm vào giỏ hàng
   addToCart: async ({ userId, itemId, quantity, price }) => {
-    const cart = await Cart.findOne({ userId });
-
+    // convert userId to ObjectId
+    const cart = await Cart.findOne({ userId: userId });
     if (!cart) {
+      const Toltal = quantity * price;
       // Nếu chưa có giỏ hàng, tạo mới
       return await Cart.create({
-        userId,
-        items: [{ itemId, quantity, price }],
+        userId: userId,
+        items: [{ itemId, quantity, price, total: Toltal }],
       });
     }
-
     // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
-    const existingItem = cart.items.find(
-      (item) => item.itemId.toString() === itemId.toString()
-    );
-
+    const existingItem = cart.items.find((item) => item.itemId === itemId);
     if (existingItem) {
-      existingItem.quantity += quantity; // Cập nhật số lượng nếu đã có
+      // increase quantity and make a new price = quantity * price of this existing item
+      existingItem.quantity += quantity; // Tăng số lượng
+      existingItem.total += quantity * price; // Tăng tổng giá trị
     } else {
-      cart.items.push({ itemId, quantity, price }); // Thêm mới
+      const total = quantity * price;
+      cart.items.push({ itemId, quantity, price, total }); // Thêm mới
     }
 
     await cart.save();

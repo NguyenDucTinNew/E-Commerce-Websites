@@ -5,7 +5,7 @@ import { wrapRequestHandler } from "../utils/handle.util.js";
 const router = express.Router();
 
 router.get("/:userId", wrapRequestHandler(CartController.getCart));
-router.post("/:userId/items", wrapRequestHandler(CartController.addItem));
+router.post("/create/:userId", wrapRequestHandler(CartController.addItem));
 router.delete(
   "/:userId/items/:itemId",
   wrapRequestHandler(CartController.removeItem)

@@ -16,16 +16,27 @@ export const cartController = {
   addItem: async (req, res) => {
     try {
       const { userId } = req.params;
-      const { itemId, quantity, price } = req.body;
+      console.log("userId", userId);
+      console.log("req.body", req.body);
+      const { items } = req.body;
+      const { itemId, quantity, price } = items[0];
       const cart = await CartService.addToCart({
         userId,
         itemId,
         quantity,
         price,
       });
-      res.status(201).json(cart);
+      res.status(201).json({
+        success: true,
+        message: "Thêm sản phẩm vào giỏ hàng thành công",
+        data: cart,
+      });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({
+        success: false,
+        message: "Thêm sản phẩm thất bại",
+        error: error.message,
+      });
     }
   },
 

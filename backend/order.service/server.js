@@ -3,8 +3,8 @@ import * as dotenv from "dotenv";
 import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import connectDB from "./configs/connect-db.configs.js";
-import orderRouter from "./routes/order.router.js";
 import morgan from "morgan";
+import rootRoutes from "./routes/index.js";
 
 dotenv.config();
 const app = express();
@@ -30,8 +30,8 @@ app.use(
 // Kết nối đến cơ sở dữ liệu
 connectDB();
 // Định nghĩa routes
-app.use(`/api/v1`, orderRouter);
-const port = process.env.PORT || 3000;
+app.use(`/api/v1`, rootRoutes);
+const port = process.env.PORT || 8084;
 app.listen(port, () => {
   console.log("🚀 ~ app.listen ~ port:", port);
 });
