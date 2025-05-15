@@ -3,8 +3,7 @@ import mongoosePaginate from "mongoose-paginate-v2";
 const inventorySchema = new mongoose.Schema(
   {
     productId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product", // Tham chiếu đến model Product (trong ProductService)
+      type: String,
       required: true,
       unique: true, // Đảm bảo mỗi sản phẩm chỉ có một bản ghi tồn kho
     },

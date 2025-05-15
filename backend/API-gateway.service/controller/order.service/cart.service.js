@@ -5,7 +5,7 @@ import { HTTP_STATUS } from "../../common/http-status.common.js";
 import { json } from "express";
 
 dotenv.config();
-export const cartController = {
+export const CartController = {
   addCart: async (req, res) => {
     try {
       const { userId } = req.params;
@@ -13,8 +13,9 @@ export const cartController = {
       let resCart;
       try {
         resCart = await axios.post(
-          `${config.ORDER_SERVICE_URL}/create/${userId}`,
-          body
+          `${process.env.ORDER_SERVICE_URL}/create/${userId}`,
+          body,
+          config
         );
         res.status(HTTP_STATUS.CREATED).json({
           success: true,
@@ -36,6 +37,28 @@ export const cartController = {
       });
     }
   },
+  deteleItemInCart: async (req, res) => {
+    try {
+      const { userId, itemId } = req.params;
+      const resCart = await axios.delete(
+        `${process.env.ORDER_SERVICE_URL}/delete/${userId}/items/${itemId}`,
+        body,
+        config
+      );
+
+      res.status(HTTP_STATUS.CREATED).json({
+        success: true,
+        message: resCart.data.message,
+        data: resCart.data.data,
+      });
+    } catch (error) {
+      res.status(HTTP_STATUS.BAD_REQUEST).json({
+        success: false,
+        message: "Lỗi khi xóa sản phẩm trong giỏ hàng",
+        error: error.message,
+      });
+    }
+  },
 };
 
-export default cartController;
+export default CartController;

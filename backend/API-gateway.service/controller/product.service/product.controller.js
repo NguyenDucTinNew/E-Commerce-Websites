@@ -31,12 +31,16 @@ export const productController = {
       const productId = newProduct.data.idproductRespone._id;
       let newInventory;
       try {
+        console.log(body);
         newInventory = await axios.post(
-          `${process.env.INVENTORY_SERVICE_URL}/createinventory`,
+          `${process.env.INVENTORY_SERVICE_URL}/createinventory/${productId}`,
           body,
           config
         );
-
+        console.log("I'm here");
+        const returnQuantityProuct = await axios.get(
+          `${process.env.PRODUCT_SERVICE_URL}/returnQuantity/${productId}`
+        );
         return res.status(HTTP_STATUS.CREATED).json({
           message: "Tạo sản phẩm thành công ",
           success: true,

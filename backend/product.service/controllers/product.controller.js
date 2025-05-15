@@ -120,6 +120,20 @@ export const productController = {
       data: productDetail,
     });
   },
+  returnQuantity: async (req, res) => {
+    const { productId } = req.params;
+    console.log("idProduct", productId);
+    const resProduct = await productService.returnQuantity(productId);
+    if (!resProduct)
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: "Trả hàng thất bại",
+        success: false,
+      });
+    return res.status(HTTP_STATUS.OK).json({
+      success: true,
+      message: "Trả hàng thành công",
+    });
+  },
   getproductbyname: async (req, res) => {
     const { name } = req.params;
     // get product detail

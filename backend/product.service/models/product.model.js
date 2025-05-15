@@ -6,9 +6,9 @@ const productSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+      uqnique: true, // Đảm bảo tên sản phẩm là duy nhất
     },
     description: {
-      type: String,
       required: true,
     },
     price: {
@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema(
       required: true,
       min: 0, // Giá không được âm
     },
-    quanlyti: {
+    stock: {
       type: Number,
       require: true,
     },

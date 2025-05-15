@@ -2,17 +2,19 @@ import inventoryModel from "../models/inventory.model.js";
 import { HTTP_STATUS } from "../common/http-status.common.js";
 
 export const inventoryService = {
-  createInventory: async (inventoryData) => {
+  createInventory: async (inventoryData, productId) => {
     try {
       // Kiểm tra xem productId đã tồn tại chưa
       const existingInventory = await inventoryModel.findOne({
-        productId: inventoryData.productId,
+        productId: productId,
       });
 
       if (existingInventory) {
-        existingInventory.actualStock = inventoryData.actualStock;
+        existingInventory.actualStock += inventoryData.stock;
+        console.log(existingInventory.actualStock);
+        console.log(existingInventory.reserStock);
         existingInventory.avaliableStock =
-          inventoryData.actualStock - existingInventory.reserStock; // Cập nhật lại avaliableStock
+          existingInventory.actualStock - existingInventory.reserStock; // Cập nhật lại avaliableStock
         const updatedInventory = await existingInventory.save();
         return {
           success: true,
@@ -23,10 +25,10 @@ export const inventoryService = {
 
       // Tạo một bản ghi inventoryModel mới
       const newInventory = new inventoryModel({
-        productId: inventoryData.productId,
-        actualStock: inventoryData.actualStock,
+        productId: productId,
+        actualStock: inventoryData.stock,
         reserStock: 0, // Khởi tạo reserStock là 0
-        avaliableStock: inventoryData.actualStock, //Khởi tạo avaliableStock bằng actualStock
+        avaliableStock: inventoryData.stock, //Khởi tạo avaliableStock bằng actualStock
         location: inventoryData.location || null, // Sử dụng giá trị mặc định nếu không được cung cấp
       });
 

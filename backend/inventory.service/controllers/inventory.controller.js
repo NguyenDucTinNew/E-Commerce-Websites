@@ -4,8 +4,9 @@ import inventoryService from "../service/inventory.service.js";
 export const inventoryController = {
   createInventory: async (req, res) => {
     try {
+      const { productId } = req.params;
       const inventoryData = req.body;
-      const result = await inventoryService.createInventory(inventoryData);
+      const result = await inventoryService.createInventory(inventoryData, productId);
 
       if (result.success) {
         return res.status(HTTP_STATUS.CREATED).json({
@@ -24,6 +25,5 @@ export const inventoryController = {
         .json({ message: "Lỗi server nội bộ" });
     }
   },
-
 };
 export default inventoryController;
