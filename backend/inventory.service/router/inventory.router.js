@@ -7,8 +7,13 @@ const router = express.Router();
 
 router.post(
   "/createinventory/:productId",
- // wrapRequestHandler(inventoryMiddleware),
+  // wrapRequestHandler(inventoryMiddleware),
   wrapRequestHandler(inventoryController.createInventory)
+);
+router.post(
+  "/updateinventory/:productId",
+  //wrapRequestHandler(inventoryMiddleware),
+  wrapRequestHandler(inventoryController.updateInventory)
 );
 
 export default router;

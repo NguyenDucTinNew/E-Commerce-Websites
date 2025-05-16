@@ -10,19 +10,23 @@ export const inventoryService = {
       });
 
       if (existingInventory) {
-        existingInventory.actualStock += inventoryData.stock;
-        console.log(existingInventory.actualStock);
-        console.log(existingInventory.reserStock);
-        existingInventory.avaliableStock =
-          existingInventory.actualStock - existingInventory.reserStock; // Cập nhật lại avaliableStock
-        const updatedInventory = await existingInventory.save();
-        return {
-          success: true,
-          message: "Cập nhật inventory thành công.",
-          data: updatedInventory,
-        };
+        const resUpdate = await inventoryService.updateInventory(
+          existingInventory.productId,
+          inventoryData.stock
+        );
+        if (!resUpdate) {
+          return {
+            success: false,
+            message: "Sản phẩm tồn tại, update thất bại",
+          };
+        } else {
+          return {
+            success: true,
+            message: "Sản phẩm tồn tại, cập nhật lại số lượng kho thành công.",
+            data: resUpdate,
+          };
+        }
       }
-
       // Tạo một bản ghi inventoryModel mới
       const newInventory = new inventoryModel({
         productId: productId,
@@ -76,7 +80,7 @@ export const inventoryService = {
     }
 
     inventory.actualStock += quantityToAdd;
-    inventory.avaliableStock += quantityToAdd; // Hoặc điều chỉnh theo logic nghiệp vụ
+    inventory.avaliableStock = inventory.actualStock - inventory.reserStock; // Hoặc điều chỉnh theo logic nghiệp vụ
     await inventory.save();
 
     return inventory;

@@ -43,7 +43,7 @@ const productService = {
     }
   },
   getproductbyname: async (name) => {
-    const productDetail = await product.find({ name: { $regex: name } });
+    const productDetail = await product.findOne({ name: { $regex: name } });
     if (!productDetail) return null;
     return productDetail;
   },

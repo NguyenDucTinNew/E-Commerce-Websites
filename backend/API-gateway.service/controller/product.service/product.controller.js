@@ -8,9 +8,35 @@ dotenv.config();
 export const productController = {
   create: async (req, res) => {
     try {
+      let productId, newInventory, newProduct;
       const body = req.body;
-      // thực hiện tìm trc nếu không có thì là cái ở dưới nếu có thì thực hiện updatekho
-      let newProduct;
+      const existingProduct = await axios.get(
+        `${process.env.PRODUCT_SERVICE_URL}/getproductbyname/${body.name}`,
+        config
+      );
+
+      if (existingProduct) {
+        console.log("lag");
+        productId = existingProduct.data.idproductRespone._id;
+        console.log(productId);
+        const updateInventory = await axios.post(
+          `${process.env.INVENTORY_SERVICE_URL}/updateinventory/${productId}`,
+          body,
+          config
+        );
+        if (updateInventory) {
+          return res.status(HTTP_STATUS.OK).json({
+            message: updateInventory.data.message,
+            success: true,
+          });
+        } else {
+          return res.status(HTTP_STATUS.BAD_REQUEST).json({
+            message: updateInventory.data.message,
+            success: false,
+          });
+        }
+      }
+      newProduct;
       try {
         newProduct = await axios.post(
           `${process.env.PRODUCT_SERVICE_URL}/createProduct`,
@@ -28,8 +54,8 @@ export const productController = {
           });
         }
       }
-      const productId = newProduct.data.idproductRespone._id;
-      let newInventory;
+      productId = newProduct.data.idproductRespone._id;
+      newInventory;
       try {
         console.log(body);
         newInventory = await axios.post(
@@ -51,12 +77,6 @@ export const productController = {
             `${process.env.PRODUCT_SERVICE_URL}/delete/${productId}`,
             { productId },
             config
-            /*
-            router.delete(
-              "/delete/:id",
-              wrapRequestHandler(productController.deleteProduct)
-            );
-            */
           );
         } catch (productDelError) {
           console.log("Rollback Failed");

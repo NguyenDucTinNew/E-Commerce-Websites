@@ -136,6 +136,7 @@ export const productController = {
   },
   getproductbyname: async (req, res) => {
     const { name } = req.params;
+    console.log("name", name);
     // get product detail
     const productDetail = await productService.getproductbyname(name);
     if (!productDetail)
@@ -143,10 +144,14 @@ export const productController = {
         message: "Tải sản phẩm thất bại!",
         success: false,
       });
+    const idproductRespone = {
+      _id: productDetail._id,
+    };
+    console.log("idproductRespone", idproductRespone);
     return res.status(HTTP_STATUS.OK).json({
-      message: "Tải sản phẩm thành công!",
+      message: "tải sản phẩm thành công",
       success: true,
-      data: productDetail,
+      idproductRespone: idproductRespone,
     });
   },
   //get product by name
