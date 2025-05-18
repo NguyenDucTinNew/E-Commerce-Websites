@@ -34,7 +34,7 @@ export const CartService = {
       });
     }
     // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
-    const existingItem = cart.items.find((item) => item.itemId === itemId);
+    const existingItem = cart.items.findOne((item) => item.itemId === itemId);
     if (existingItem) {
       // increase quantity and make a new price = quantity * price of this existing item
       existingItem.quantity += quantity; // Tăng số lượng
@@ -89,6 +89,60 @@ export const CartService = {
     await cart.save();
     return cart.populate("items.itemId", "name price images");
   },
-};
+  //update total during quantity change
 
+  updateItemTotalwhenQuantityIncrease: async ({ cartId, itemId }) => {
+    // Tìm giỏ hàng và mặt hàng cụ thể
+    const cart = await Cart.findOne({ _id: cartId, "items.itemId": itemId });
+    if (!cart) return null; // Kiểm tra nếu giỏ hàng không tồn tại
+
+    const item = cart.items.find((item) => item.itemId === itemId);
+    const newQuantity = item.quantity + 1; // Tăng số lượng lên 1
+    const newTotal = item.price * newQuantity; // Tính toán tổng mới
+
+    // Cập nhật giỏ hàng
+    const updateCart = await Cart.findOneAndUpdate(
+      { _id: cartId, "items.itemId": itemId },
+      {
+        $inc: {
+          "items.$.quantity": 1,
+        },
+        $set: {
+          "items.$.total": newTotal, // Cập nhật tổng mới
+        },
+      },
+      { new: true }
+    ).populate("items.itemId", "name price images");
+
+    return updateCart; // Trả về giỏ hàng đã cập nhật
+  },
+  updateItemTupdateItemTotalwhenQuantityDecrease: async ({
+    cartId,
+    itemId,
+  }) => {
+    // Tìm giỏ hàng và mặt hàng cụ thể
+    const cart = await Cart.findOne({ _id: cartId, "items.itemId": itemId });
+    if (!cart) return null; // Kiểm tra nếu giỏ hàng không tồn tại
+
+    const item = cart.items.find((i) => i.itemId === itemId);
+    const newQuantity = item.quantity - 1; // Tăng số lượng lên 1
+    const newTotal = item.price * newQuantity; // Tính toán tổng mới
+
+    // Cập nhật giỏ hàng
+    const updateCart = await Cart.findOneAndUpdate(
+      { _id: cartId, "items.itemId": itemId },
+      {
+        $inc: {
+          "items.$.quantity": -1,
+        },
+        $set: {
+          "items.$.total": newTotal, // Cập nhật tổng mới
+        },
+      },
+      { new: true }
+    ).populate("items.itemId", "name price images");
+
+    return updateCart; // Trả về giỏ hàng đã cập nhật
+  },
+};
 export default CartService;

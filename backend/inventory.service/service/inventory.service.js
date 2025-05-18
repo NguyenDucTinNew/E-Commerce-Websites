@@ -71,6 +71,23 @@ export const inventoryService = {
       return { success: false, message: error.message };
     }
   },
+
+  checkItemsInInventory: async (items) => {
+    const check = await Promise.all(
+      items.map(async (item) => {
+        const inventory = await inventoryModel.findOne({
+          productId: item.productId,
+        });
+        if (!inventory) {
+          return false; // Không tìm thấy sản phẩm trong kho
+        }
+        if (inventory.avaliableStock < item.quantity) {
+          return false; // Số lượng trong kho không đủ
+        }
+        return true; // Sản phẩm có đủ số lượng trong kho
+      })
+    );  
+  },
   // Inventory Service
   updateInventory: async (productId, quantityToAdd) => {
     const inventory = await inventoryModel.findOne({ productId });

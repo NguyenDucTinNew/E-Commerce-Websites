@@ -50,5 +50,20 @@ export const inventoryController = {
         .json({ message: "Lỗi server nội bộ" });
     }
   },
+  checkItemsInStock: async (req, res) => {
+    const body = req.body;
+    const result = await inventoryService.checkItemsInInventory(body);
+    if (result) {
+      return res.status(HTTP_STATUS.OK).json({
+        message: "Tất cả sản phẩm đều có sẵn trong kho",
+        success: true,
+      });
+    } else {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: "Có sản phẩm không đủ số lượng trong kho",
+        success: false,
+      });
+    }
+  },
 };
 export default inventoryController;
