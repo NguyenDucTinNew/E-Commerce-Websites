@@ -8,6 +8,7 @@ export const wrapRequestHandler = (func) => {
         message: error.message,
         success: false,
       });
+      next(error);
     }
   };
 };

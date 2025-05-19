@@ -2,31 +2,37 @@ import inventoryModel from "../models/inventory.model.js";
 import { HTTP_STATUS } from "../common/http-status.common.js";
 
 export const inventoryService = {
-  createInventory: async (inventoryData) => {
+  createInventory: async (inventoryData, productId) => {
     try {
       // Kiểm tra xem productId đã tồn tại chưa
       const existingInventory = await inventoryModel.findOne({
-        productId: inventoryData.productId,
+        productId: productId,
       });
 
       if (existingInventory) {
-        existingInventory.actualStock = inventoryData.actualStock;
-        existingInventory.avaliableStock =
-          inventoryData.actualStock - existingInventory.reserStock; // Cập nhật lại avaliableStock
-        const updatedInventory = await existingInventory.save();
-        return {
-          success: true,
-          message: "Cập nhật inventory thành công.",
-          data: updatedInventory,
-        };
+        const resUpdate = await inventoryService.updateInventory(
+          existingInventory.productId,
+          inventoryData.stock
+        );
+        if (!resUpdate) {
+          return {
+            success: false,
+            message: "Sản phẩm tồn tại, update thất bại",
+          };
+        } else {
+          return {
+            success: true,
+            message: "Sản phẩm tồn tại, cập nhật lại số lượng kho thành công.",
+            data: resUpdate,
+          };
+        }
       }
-
       // Tạo một bản ghi inventoryModel mới
       const newInventory = new inventoryModel({
-        productId: inventoryData.productId,
-        actualStock: inventoryData.actualStock,
+        productId: productId,
+        actualStock: inventoryData.stock,
         reserStock: 0, // Khởi tạo reserStock là 0
-        avaliableStock: inventoryData.actualStock, //Khởi tạo avaliableStock bằng actualStock
+        avaliableStock: inventoryData.stock, //Khởi tạo avaliableStock bằng actualStock
         location: inventoryData.location || null, // Sử dụng giá trị mặc định nếu không được cung cấp
       });
 
@@ -64,6 +70,37 @@ export const inventoryService = {
       console.error("Lỗi khi cập nhật kiểm tra kho", error);
       return { success: false, message: error.message };
     }
+  },
+
+  checkItemsInInventory: async (items) => {
+    const check = await Promise.all(
+      items.map(async (item) => {
+        const inventory = await inventoryModel.findOne({
+          productId: item.productId,
+        });
+        if (!inventory) {
+          return false; // Không tìm thấy sản phẩm trong kho
+        }
+        if (inventory.avaliableStock < item.quantity) {
+          return false; // Số lượng trong kho không đủ
+        }
+        return true; // Sản phẩm có đủ số lượng trong kho
+      })
+    );  
+  },
+  // Inventory Service
+  updateInventory: async (productId, quantityToAdd) => {
+    const inventory = await inventoryModel.findOne({ productId });
+
+    if (!inventory) {
+      throw new Error(`Inventory not found for product ID: ${productId}`);
+    }
+
+    inventory.actualStock += quantityToAdd;
+    inventory.avaliableStock = inventory.actualStock - inventory.reserStock; // Hoặc điều chỉnh theo logic nghiệp vụ
+    await inventory.save();
+
+    return inventory;
   },
   // Bỏ hàng vào cart chứ chưa mua
   ReserveItemsbyListProducts: async (listproduct) => {

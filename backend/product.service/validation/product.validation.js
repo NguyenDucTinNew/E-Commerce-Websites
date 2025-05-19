@@ -34,6 +34,4 @@ export const productValidation = joi.object({
     "any.required": "Danh sách hình ảnh không được để trống",
     "string.uri": "URL hình ảnh không hợp lệ",
   }),
-  createdAt: joi.date().optional(),
-  updatedAt: joi.date().optional(),
 });

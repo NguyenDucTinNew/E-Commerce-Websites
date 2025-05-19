@@ -84,7 +84,7 @@ router.post("/login", (req, res, next) => {
 // Lấy thông tin profile người dùng
 router.get(
   "/profile",
-  wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
+  // wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
   wrapRequestHandler(getProfile) // Lấy thông tin profile
 );
 /*
@@ -117,7 +117,7 @@ router.get(
 );
 router.delete(
   "/deleteuser/:userid",
-  wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
+ // wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
   wrapRequestHandler(deleteUser)
 );
 router.put(

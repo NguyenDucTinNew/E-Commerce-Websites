@@ -32,4 +32,8 @@ router.get(
   "/getproductbyname/:name",
   wrapRequestHandler(productController.getproductbyname)
 );
+router.get(
+  "/returnQuantity/:productId",
+  wrapRequestHandler(productController.returnQuantity)
+);
 export default router;

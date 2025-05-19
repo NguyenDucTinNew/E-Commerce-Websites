@@ -1,22 +1,50 @@
-
 import { HTTP_STATUS } from "../common/http-status.common.js";
 import { userValidation } from "../validation/userValidation.js"; // Đảm bảo đường dẫn đúng
 import User from "../models/userModel.js"; // Đảm bảo đường dẫn đúng
 
 // Middleware kiem tra nguoi dung
 export const authMiddleware = async (req, res, next) => {
+  // Thêm vào đầu middleware
+  console.log("Request body:", req.body);
+  console.log("Headers:", req.headers);
   const body = req.body;
-  // Validate
-  const { error } = userValidation.validate(body, { abortEarly: false });
-  if (error) {
-    const errors = error.details.map((item) => item.message);
-    return res.status(HTTP_STATUS.BAD_REQUEST).json({
-      message: errors,
-      success: false,
-    });
-  }
+  const username = req.body.username;
+  const email = req.body.email;
+  try {
+    // Validate
+    const { error } = userValidation.validate(body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((item) => item.message);
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: errors,
+        success: false,
+      });
+    }
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        errors: "Validate Failed",
+        success: false,
+        message: "Username already exists",
+      });
+    }
 
-  next(); // Tiếp tục đến route handler
+    // Kiểm tra sự tồn tại của email
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        errors: "Validate Failed",
+        message: "Email already exists",
+        success: false,
+      });
+    }
+    next();
+  } catch (error) {
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ message: "Lỗi Hệ Thống", success: false });
+  }
+  // Tiếp tục đến route handler
 };
 
 export const finduseraccount = async (req, res, next) => {

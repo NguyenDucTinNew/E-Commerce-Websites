@@ -19,11 +19,14 @@ export const userService = {
   },
   deleteUser: async (userId) => {
     try {
-      return (result = await User.findByIdAndDelete(userId)); //delete user by id
+      const deletedUser = await User.findByIdAndDelete(userId);
+      return deletedUser; // Trả về người dùng đã xóa (hoặc null nếu không tìm thấy)
     } catch (error) {
-      throw new Error("Error deleting user: " + error.message);
+      console.error("Lỗi khi xóa người dùng:", error);
+      throw error; // Ném lỗi để controller xử lý
     }
   },
+
   updateUser: async (userid, data) => {
     return await User.findByIdAndUpdate(userid, data, { new: true });
   },

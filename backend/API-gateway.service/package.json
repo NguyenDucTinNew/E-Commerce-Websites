@@ -21,6 +21,7 @@
     "express-session": "^1.18.1",
     "http-proxy-middleware": "^2.0.9",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.2",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.7",
     "passport": "^0.7.0",

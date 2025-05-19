@@ -13,11 +13,17 @@ const router = express.Router();
 router.post("/login", wrapRequestHandler(authController.login));
 
 router.post("/register", wrapRequestHandler(authController.register));
+
+router.get(
+  "/user/getprofile",
+  wrapRequestHandler(authenticate),
+  wrapRequestHandler(checkPermission(process.env.ROLE_ADMIN)),
+  wrapRequestHandler(userController.getProfile)
+);
 // router.get(
 //   "/getsessionrole",
 //   wrapRequestHandler(authController.isAuthenticated), // Kiểm tra quyền truy cập
 //   wrapRequestHandler(authController.getSessionRole)
-// );
 // router.get(
 //   "/test",
 //   wrapRequestHandler(authController.isAuthenticated), // Kiểm tra quyền truy cập

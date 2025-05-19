@@ -1,23 +1,19 @@
 import { orderService } from "../service/order.service.js";
 import { HTTP_STATUS } from "../common/http-status.common.js";
-
+import mongoose from "mongoose";
 export const orderController = {
   createCart: async (req, res) => {
-  
-    const body = req.body;
-    const result = await orderService.createCart(body.userID);
+    const userid = new mongoose.Types.ObjectId(req.params.userid);
+    const result = await orderService.createCart(userid);
     if (!result)
-      return res.status(HTTP_STATUS.BAD_REQUEST).JSON({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
         succes: false,
         message: "Tạo giỏ hàng thất bại",
       });
-    else
-      return res.status(HTTP_STATUS.OK).JSON({
-        succes: true,
-        message: "Tạo giỏ hàng thành công",
-      });
-  
-    
+    return res.status(HTTP_STATUS.CREATED).json({
+      succes: true,
+      message: "Tạo giỏ hàng thành công",
+    });
   },
 };
 

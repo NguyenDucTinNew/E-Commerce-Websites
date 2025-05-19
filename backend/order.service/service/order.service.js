@@ -1,11 +1,11 @@
 import OrderModel from "../models/order.model.js";
-import OrderItemModel from "../models/orderItems.model.js";
-import CartModel from "../models/cart.model.js";
 
+import CartModel from "../models/cart.model.js";
+import mongoose from "mongoose";
 export const orderService = {
   createCart: async (userid) => {
-    const newcart = await OrderModel.create({
-      userid: userid,
+    const newcart = await CartModel.create({
+      userId: userid,
       listProduct: [],
     });
 
