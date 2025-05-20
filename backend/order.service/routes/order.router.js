@@ -6,6 +6,15 @@ const router = express.Router();
 
 router.post(
   "/createCart/:userid",
+
   wrapRequestHandler(orderController.createCart)
+);
+router.post(
+  "/createOrder/:userid",
+  wrapRequestHandler(orderController.createOrder)
+);
+router.put(
+  "/updateStatusOrder/:orderId",
+  wrapRequestHandler(orderController.updateStatusOrder)
 );
 export default router;

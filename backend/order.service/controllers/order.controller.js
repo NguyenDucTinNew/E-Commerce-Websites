@@ -15,6 +15,45 @@ export const orderController = {
       message: "Tạo giỏ hàng thành công",
     });
   },
+  createOrder: async (req, res) => {
+    const body = req.body;
+    const userId = req.params.userid;
+    const newOrder = await orderService.createOrderwithPendingstatus(
+      userId,
+      body
+    );
+    if (!newOrder) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        success: false,
+        message: "Tạo đơn hàng thất bại",
+      });
+    }
+    return res.status(HTTP_STATUS.CREATED).json({
+      success: true,
+      message: "Tạo đơn hàng thành công",
+      data: newOrder,
+    });
+  },
+  updateStatusOrder: async (req, res) => {
+    const orderId = req.params.orderId;
+    const status = req.body.status;
+    try {
+      const updatedOrder = await orderService.updateOrderStatus(
+        orderId,
+        status
+      );
+      return res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Cập nhật trạng thái đơn hàng thành công",
+        data: updatedOrder,
+      });
+    } catch (error) {
+      return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
 };
 
 export default orderController;
