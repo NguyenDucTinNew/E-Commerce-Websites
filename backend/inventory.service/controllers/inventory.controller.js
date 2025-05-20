@@ -65,5 +65,56 @@ export const inventoryController = {
       });
     }
   },
+  blockReserverStock: async (req, res) => {
+    const body = req.body;
+    const resBlockReservver = await inventoryService.ReserveItemsbyListProducts(
+      body
+    );
+    if (resBlockReservver) {
+      return res.status(HTTP_STATUS.OK).json({
+        message: resBlockReservver.message,
+        success: true,
+      });
+    } else {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: resBlockReservver.message,
+        success: false,
+      });
+    }
+  },
+  returnItemsafterPaymentSucces: async (req, res) => {
+    const body = req.body;
+    const resReturnItems = await inventoryService.ReturnItemsAfterPaymentSucces(
+      body
+    );
+    if (resReturnItems) {
+      return res.status(HTTP_STATUS.OK).json({
+        message: resReturnItems.message,
+        success: true,
+      });
+    } else {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: resReturnItems.message,
+        success: false,
+      });
+    }
+  },
+  returnItemsafterPaymenFailed: async (req, res) => {
+    const body = req.body;
+    const resReturnItems = await inventoryService.ReturnItemsAfterPaymentFailed(
+      body
+    );
+    if (resReturnItems) {
+      return res.status(HTTP_STATUS.OK).json({
+        message: resReturnItems.message,
+        success: true,
+      });
+    } else {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: resReturnItems.message,
+        success: false,
+      });
+    }
+  },
 };
 export default inventoryController;

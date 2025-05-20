@@ -144,8 +144,6 @@ export const inventoryService = {
     }
   },
 
-  // timeoutpayment to throw all reserveStock Item
-
   //Return Item When TimeOUT of the order or Payment Failed
   ReturnItems: async (listproduct) => {
     try {

@@ -6,14 +6,31 @@ import express from "express";
 const router = express.Router();
 
 router.post(
-  "/createinventory/:productId",
+  "/createInventory/:productId",
   // wrapRequestHandler(inventoryMiddleware),
   wrapRequestHandler(inventoryController.createInventory)
 );
 router.post(
-  "/updateinventory/:productId",
+  "/updateInventory/:productId",
   //wrapRequestHandler(inventoryMiddleware),
   wrapRequestHandler(inventoryController.updateInventory)
+);
+router.post(
+  "/checkItemsInStock",
+  // wrapRequestHandler(inventoryMiddleware),
+  wrapRequestHandler(inventoryController.checkItemsInStock)
+);
+router.put(
+  "/blockReserStock",
+  wrapRequestHandler(inventoryController.blockReserverStock)
+);
+router.put(
+  "/returnItemToStock",
+  wrapRequestHandler(inventoryController.returnItemsafterPaymentSucces)
+);
+router.put(
+  "/returnItemToStockPaymentFailed",
+  wrapRequestHandler(inventoryController.returnItemsafterPaymenFailed)
 );
 
 export default router;
