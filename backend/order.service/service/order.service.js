@@ -65,7 +65,7 @@ export const orderService = {
       throw new Error("Error fetching order: " + error.message);
     }
   },
-  /*
+  /*x`x`
   getAllOrders: async (query) => {
     try {
       const { page = 1, limit = 10 } = query;

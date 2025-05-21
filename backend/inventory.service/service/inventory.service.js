@@ -79,16 +79,16 @@ export const inventoryService = {
           productId: item.productId,
         });
         if (!inventory) {
-          return false; // Không tìm thấy sản phẩm trong kho
+          return false; 
         }
         if (inventory.avaliableStock < item.quantity) {
-          return false; // Số lượng trong kho không đủ
+          return false; 
         }
-        return true; // Sản phẩm có đủ số lượng trong kho
+        return true;
       })
     );
   },
-  // Inventory Service
+
   updateInventory: async (productId, quantityToAdd) => {
     const inventory = await inventoryModel.findOne({ productId });
 

@@ -139,11 +139,13 @@ export const productController = {
     console.log("name", name);
     // get product detail
     const productDetail = await productService.getproductbyname(name);
-    if (!productDetail)
+    if (!productDetail) {
+      console.log("Failed ne con");
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         message: "Tải sản phẩm thất bại!",
         success: false,
       });
+    }
     const idproductRespone = {
       _id: productDetail._id,
     };

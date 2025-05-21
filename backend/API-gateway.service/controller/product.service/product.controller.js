@@ -7,36 +7,37 @@ dotenv.config();
 
 export const productController = {
   create: async (req, res) => {
+    let body = req.body;
+    let productId;
     try {
-      let productId, newInventory, newProduct;
-      const body = req.body;
-      const existingProduct = await axios.get(
+      const existingProductResponse = await axios.get(
         `${process.env.PRODUCT_SERVICE_URL}/getproductbyname/${body.name}`,
         config
       );
 
-      if (existingProduct) {
-        console.log("lag");
-        productId = existingProduct.data.idproductRespone._id;
-        console.log(productId);
-        const updateInventory = await axios.post(
-          `${process.env.INVENTORY_SERVICE_URL}/updateinventory/${productId}`,
-          body,
-          config
-        );
-        if (updateInventory) {
+      if (existingProductResponse && existingProductResponse.data) {
+        productId = existingProductResponse.data.idproductRespone._id;
+        try {
+          const updateInventory = await axios.post(
+            `${process.env.INVENTORY_SERVICE_URL}/updateinventory/${productId}`,
+            body,
+            config
+          );
+
           return res.status(HTTP_STATUS.OK).json({
             message: updateInventory.data.message,
             success: true,
           });
-        } else {
+        } catch (error) {
           return res.status(HTTP_STATUS.BAD_REQUEST).json({
             message: updateInventory.data.message,
             success: false,
           });
         }
       }
-      newProduct;
+    } catch (errorProductName) {
+      // Create a new product
+      let newProduct;
       try {
         newProduct = await axios.post(
           `${process.env.PRODUCT_SERVICE_URL}/createProduct`,
@@ -44,58 +45,40 @@ export const productController = {
           config
         );
       } catch (productError) {
-        // Nếu User Service trả về lỗi
-        if (productError.response) {
-          res.status(productError.response.status).json({
-            message:
-              productError.response.data.message || "Tạo sản phẩm thất bại",
-            success: false,
-            errors: productError.response.data.errors,
-          });
-        }
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
+          message: newProduct.message || "Tạo sản phẩm thất bại",
+          success: false,
+          errors: newProduct.data.errors,
+        });
       }
+
       productId = newProduct.data.idproductRespone._id;
-      newInventory;
+
+      // Create inventory for the new product
       try {
-        console.log(body);
-        newInventory = await axios.post(
+        await axios.post(
           `${process.env.INVENTORY_SERVICE_URL}/createinventory/${productId}`,
           body,
           config
         );
-        console.log("I'm here");
-        const returnQuantityProuct = await axios.get(
-          `${process.env.PRODUCT_SERVICE_URL}/returnQuantity/${productId}`
-        );
+
         return res.status(HTTP_STATUS.CREATED).json({
-          message: "Tạo sản phẩm thành công ",
+          message: "Tạo sản phẩm thành công",
           success: true,
         });
       } catch (inventoryError) {
-        try {
-          await axios.delete(
-            `${process.env.PRODUCT_SERVICE_URL}/delete/${productId}`,
-            { productId },
-            config
-          );
-        } catch (productDelError) {
-          console.log("Rollback Failed");
-        }
-        return res.status(error.response.status).json({
-          message:
-            inventoryError.response.data.message || "Tạo sản phẩm thất bại",
+        // Rollback product creation if inventory creation fails
+        await axios.delete(
+          `${process.env.PRODUCT_SERVICE_URL}/delete/${productId}`,
+          config
+        );
+
+        return res.status(inventoryError.response.status).json({
+          message: inventoryError.response.data.message || "Tạo kho thất bại",
           success: false,
           errors: inventoryError.response.data.errors,
         });
       }
-    } catch {
-      return (
-        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR),
-        json({
-          message: "Lỗi hệ thống ",
-          success: false,
-        })
-      );
     }
   },
   //get product

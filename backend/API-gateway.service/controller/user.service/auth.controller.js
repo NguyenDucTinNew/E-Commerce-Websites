@@ -4,7 +4,7 @@ import { HTTP_STATUS } from "../../common/http-status.common.js";
 import * as dotenv from "dotenv";
 import { isAuthenticated } from "../../../user.service/middlewares/authMiddleware.js";
 import jwt from "jsonwebtoken";
-import redisConfig from "../../../user.service/configs/init.redis.js"; // Đảm bảo đường dẫn đúng
+import redisConfig from "../../redisseting/init.redis.js";
 import mongoose from "mongoose";
 
 dotenv.config();
@@ -25,7 +25,8 @@ export const authController = {
         message: "Đăng nhập thất bại",
         success: false,
       });
-
+    
+ 
     return res.status(HTTP_STATUS.OK).json({
       message: "Đăng nhập thành công",
       sucess: true,
