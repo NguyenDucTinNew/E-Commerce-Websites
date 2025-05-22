@@ -25,6 +25,7 @@ export const CartService = {
   addToCart: async ({ userId, itemId, quantity, price }) => {
     // convert userId to ObjectId
     const cart = await Cart.findOne({ userId: userId });
+    console.log(userId + " " + itemId + " " + quantity + " " + price);
     if (!cart) {
       const Toltal = quantity * price;
       // Nếu chưa có giỏ hàng, tạo mới
@@ -34,14 +35,16 @@ export const CartService = {
       });
     }
     // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
-    const existingItem = cart.items.findOne((item) => item.itemId === itemId);
+    const existingItem = cart.items.find((item) => item.itemId === itemId);
+    console.log("I'm here");
     if (existingItem) {
       // increase quantity and make a new price = quantity * price of this existing item
       existingItem.quantity += quantity; // Tăng số lượng
-      existingItem.total += quantity * price; // Tăng tổng giá trị
+
+      existingItem.total = existingItem.quantity * price; // Tăng tổng giá trị
     } else {
       const total = quantity * price;
-      cart.items.push({ itemId, quantity, price, total }); // Thêm mới
+      cart.items.push({ itemId, quantity, price, total });
     }
 
     await cart.save();
@@ -55,6 +58,10 @@ export const CartService = {
       { $pull: { items: { itemId } } },
       { new: true }
     ).populate("items.itemId", "name price images");
+  },
+
+  findcart: async ({ userID }) => {
+    return await Cart.findOne({ userId: userID });
   },
 
   // 4. Lấy giỏ hàng theo userId (có phân trang)
@@ -143,6 +150,28 @@ export const CartService = {
     ).populate("items.itemId", "name price images");
 
     return updateCart; // Trả về giỏ hàng đã cập nhật
+  },
+  removeItemsFromCart: async (userId, items) => {
+    let cart = await Cart.findOne({ userId: userId }); // Use findOne to get a single cart
+    console.log(userId);
+    console.log(cart);
+
+    if (!cart) throw new Error("Cart not found");
+
+    try {
+      // Filter out items that are in the Items array
+      cart.items = cart.items.filter((item) => !items.includes(item.itemId));
+      await cart.save(); // Ensure you await the save operation
+
+      return {
+        message: "Xóa Sản Phẩm thành công",
+        success: true,
+      };
+    } catch (error) {
+      return {
+        message: "Lỗi Xóa Sản Phẩm Thất Bại",
+      };
+    }
   },
 };
 export default CartService;

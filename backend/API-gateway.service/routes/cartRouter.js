@@ -17,5 +17,9 @@ router.delete(
   // wrapRequestHandler(checkPermission(process.env.ROLE_ADMIN)), // Kiểm tra quyền truy cập
   wrapRequestHandler(CartController.deteleItemInCart)
 );
+router.post(
+  "/transferItemsToOrder",
+  wrapRequestHandler(CartController.transferItems)
+);
 
 export default router;
