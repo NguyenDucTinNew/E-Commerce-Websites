@@ -4,6 +4,14 @@ import cors from "cors";
 import morgan from "morgan";
 import rootRoutes from "./routes/index.js";
 import redisConfig from "./redisseting/init.redis.js";
+import {
+  get,
+  set,
+  incrby,
+  exists,
+  setnx,
+  decrby,
+} from "./redisseting/model.redis.js";
 import { RedisStore } from "connect-redis";
 import session from "express-session";
 import passport from "passport";
@@ -17,7 +25,7 @@ app.use(express.json());
 
 // Initialize Redis
 redisConfig.initRedis();
-
+const client = redisConfig.getRedis();
 const redisStore = new RedisStore({
   client: redisConfig.getRedis(), // Your Redis client
   prefix: "mysession:", // Optional key prefix
@@ -65,8 +73,11 @@ app.get("/test-redis", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 const port = process.env.PORT || 3020;
 app.listen(port, () => {
   console.log("🚀 Server running on port:", port);
+});
+process.on("SIGINT", async () => {
+  await redisConfig.closeRedis();
+  process.exit();
 });
