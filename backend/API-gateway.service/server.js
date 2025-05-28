@@ -25,7 +25,7 @@ app.use(express.json());
 
 // Initialize Redis
 redisConfig.initRedis();
-const client = redisConfig.getRedis();
+
 const redisStore = new RedisStore({
   client: redisConfig.getRedis(), // Your Redis client
   prefix: "mysession:", // Optional key prefix
@@ -64,19 +64,21 @@ app.use(
 );
 app.use(`/api/v2`, rootRoutes);
 // Trong API Gateway (test route)
-app.get("/test-redis", async (req, res) => {
-  try {
-    const redisClient = redisConfig.getRedis(); // Lấy client Redis
-    const value = await redisClient.get("taolaai"); // Đọc key từ Redis
-    res.json({ success: !!value, value });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// app.get("/test-redis", async (req, res) => {
+//   try {
+//     const redisClient = redisConfig.getRedis(); // Lấy client Redis
+//     const value = await redisClient.get("taolaai"); // Đọc key từ Redis
+//     res.json({ success: !!value, value });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 const port = process.env.PORT || 3020;
 app.listen(port, () => {
   console.log("🚀 Server running on port:", port);
 });
+
+const count = await set("hello", 10);
 process.on("SIGINT", async () => {
   await redisConfig.closeRedis();
   process.exit();

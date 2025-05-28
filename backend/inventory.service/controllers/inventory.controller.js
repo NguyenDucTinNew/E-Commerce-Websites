@@ -116,5 +116,15 @@ export const inventoryController = {
       });
     }
   },
+  testRedisWrokingWithInventory: async (req, res)=> {
+    try{
+      
+    }catch(err) {
+      console.error("Lỗi trong inventoryController.testRedisWrokingWithInventory:", err);
+      return res
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ message: "Lỗi server nội bộ" });
+    }
+  }
 };
 export default inventoryController;
