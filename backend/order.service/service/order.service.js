@@ -65,7 +65,7 @@ export const orderService = {
       throw new Error("Error fetching order: " + error.message);
     }
   },
-  /*
+  /*x`x`
   getAllOrders: async (query) => {
     try {
       const { page = 1, limit = 10 } = query;
@@ -173,6 +173,49 @@ export const orderService = {
       throw new Error("Error filtering orders by status: " + error.message);
     }
   },
+  createOder: async (userID, listProduct) => {
+    try {
+      let totalAmount;
+      for (const product of listProduct) {
+        const productId = product.productId;
+        const quantity = product.quantity;
+
+        totalAmount += product.price * quantity;
+      }
+      const newOrder = await OrderModel.create({
+        userId: userID,
+        items: listProduct,
+        totalAmount: totalAmount,
+        orderDate: new Date(),
+        status: "pending",
+        shippingAddress: "",
+        orderType: "online",
+      });
+      if (newOrder) {
+        newOrder.save();
+        return { success: true, message: "Order created successfully" };
+      }
+      return { success: false, message: "Order creation failed" };
+    } catch (error) {
+      console.error("Error creating order:", error);
+      throw new Error("Error creating order");
+    }
+  },
+  updateStatusOrder: async (orderId, status) => {
+    try {
+      const ResOrderUpdate = await OrderModel.findByIdAndUpdate(
+        orderId,
+        {
+          $set: { status: status },
+        },
+        { new: true }
+      );
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      throw new Error("Error updating order status");
+    }
+  },
+  
 };
 
 export default orderService;

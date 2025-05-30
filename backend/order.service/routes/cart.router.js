@@ -15,5 +15,9 @@ router.patch(
   wrapRequestHandler(CartController.updateQuantity)
 );
 router.delete("/:userId", wrapRequestHandler(CartController.clearCart));
-
+router.post(
+  "/transferItems/:userId",
+  wrapRequestHandler(CartController.removeItemsFromCart)
+);
+router.get("/findCart/:userId", wrapRequestHandler(CartController.findCart));
 export default router;

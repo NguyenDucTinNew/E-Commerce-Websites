@@ -1,5 +1,6 @@
 import CartService from "../service/cart.service.js";
-
+import { HTTP_STATUS } from "../common/http-status.common.js";
+import Cart from "../models/cart.model.js";
 export const cartController = {
   getCart: async (req, res) => {
     try {
@@ -15,7 +16,7 @@ export const cartController = {
   // 2. Thêm sản phẩm vào giỏ hàng
   addItem: async (req, res) => {
     try {
-      const { userId } = req.params;
+      const userId = req.params.userId;
       console.log("userId", userId);
       console.log("req.body", req.body);
       const { items } = req.body;
@@ -40,7 +41,7 @@ export const cartController = {
     }
   },
 
-  // 3. Xóa sản phẩm khỏi giỏ hàng
+  // remove a item from cart
   removeItem: async (req, res) => {
     try {
       const { userId, itemId } = req.params;
@@ -75,6 +76,57 @@ export const cartController = {
       res.json({ message: "Cart cleared successfully" });
     } catch (error) {
       res.status(400).json({ error: error.message });
+    }
+  },
+  findCart: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const resFindCart = await CartService.findcart(userId);
+      if (resFindCart) {
+        return res.status(HTTP_STATUS.OK).json({
+          message: "Found Cart",
+          success: true,
+        });
+      }
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: "Cart not Found",
+        success: false,
+      });
+    } catch (error) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: error.message,
+        success: false,
+      });
+    }
+  },
+
+  // transfer items from cart to order
+  removeItemsFromCart: async (req, res) => {
+    try {
+      let userId = req.params.userId;
+      let items = req.body.items;
+      try {
+        const resCartRemove = await CartService.removeItemsFromCart(
+          userId,
+          items
+        );
+        if (resCartRemove)
+          return res.status(HTTP_STATUS.OK).json({
+            message: "Xoa San Pham Thanh Cong",
+            success: true,
+          });
+      } catch (resCarerror) {
+        console.log("chay that bai");
+        res.status(HTTP_STATUS.BAD_REQUEST).json({
+          message: resCarerror.message || "Lấy sản phẩm thất bại",
+          success: false,
+        });
+      }
+    } catch (error) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: error.message,
+        success: false,
+      });
     }
   },
 };

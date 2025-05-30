@@ -4,6 +4,14 @@ import cors from "cors";
 import morgan from "morgan";
 import rootRoutes from "./routes/index.js";
 import redisConfig from "./redisseting/init.redis.js";
+import {
+  get,
+  set,
+  incrby,
+  exists,
+  setnx,
+  decrby,
+} from "./redisseting/model.redis.js";
 import { RedisStore } from "connect-redis";
 import session from "express-session";
 import passport from "passport";
@@ -56,17 +64,22 @@ app.use(
 );
 app.use(`/api/v2`, rootRoutes);
 // Trong API Gateway (test route)
-app.get("/test-redis", async (req, res) => {
-  try {
-    const redisClient = redisConfig.getRedis(); // Lấy client Redis
-    const value = await redisClient.get("taolaai"); // Đọc key từ Redis
-    res.json({ success: !!value, value });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
+// app.get("/test-redis", async (req, res) => {
+//   try {
+//     const redisClient = redisConfig.getRedis(); // Lấy client Redis
+//     const value = await redisClient.get("taolaai"); // Đọc key từ Redis
+//     res.json({ success: !!value, value });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 const port = process.env.PORT || 3020;
 app.listen(port, () => {
   console.log("🚀 Server running on port:", port);
+});
+
+const count = await set("hello", 10);
+process.on("SIGINT", async () => {
+  await redisConfig.closeRedis();
+  process.exit();
 });

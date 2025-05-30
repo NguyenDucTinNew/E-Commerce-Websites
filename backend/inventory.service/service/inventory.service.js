@@ -79,16 +79,16 @@ export const inventoryService = {
           productId: item.productId,
         });
         if (!inventory) {
-          return false; // Không tìm thấy sản phẩm trong kho
+          return false; 
         }
         if (inventory.avaliableStock < item.quantity) {
-          return false; // Số lượng trong kho không đủ
+          return false; 
         }
-        return true; // Sản phẩm có đủ số lượng trong kho
+        return true;
       })
-    );  
+    );
   },
-  // Inventory Service
+
   updateInventory: async (productId, quantityToAdd) => {
     const inventory = await inventoryModel.findOne({ productId });
 
@@ -144,8 +144,6 @@ export const inventoryService = {
     }
   },
 
-  // timeoutpayment to throw all reserveStock Item
-
   //Return Item When TimeOUT of the order or Payment Failed
   ReturnItems: async (listproduct) => {
     try {
@@ -199,43 +197,58 @@ export const inventoryService = {
     }
   },
 
-  ReturnItemsAfterPayment: async (listproduct) => {
+  ReturnItemsAfterPaymentFailed: async (listproduct) => {
     try {
-      // Lặp qua từng sản phẩm trongs listproduct
       for (const product of listproduct) {
         const productId = product.productId;
         const quantity = product.quantity;
 
-        // Tìm bản ghi inventory của sản phẩm
         const inventory = await inventoryModel.findOne({
           productId: productId,
         });
 
-        // Nếu không tìm thấy inventory, báo lỗi
         if (!inventory) {
           throw new Error(
             `Không tìm thấy inventory cho sản phẩm có productId: ${productId}`
           );
         }
-
-        //Kiểm tra xem actualStock có đủ quantity không (Thực tế không thể xảy ra , nhưng ngoại lệ có thể do lỗi hệ thống)
-        if (inventory.reserStock < quantity) {
-          throw new Error(`LỖI NGHIỆM TRỌNG: reserveStock không đủ để trả lại. 
-            Product: ${productId}, 
-            Yêu cầu: ${quantity}, 
-            Hiện có: ${inventory.reserStock}`);
-        }
+        //return avaiablestock by payment failed
+        inventory.avaliableStock += quantity;
+        // retủn reserverstock by payment failed
         inventory.reserStock -= quantity;
-        inventory.actualStock -= quantity;
-        inventory.avaliableStock = inventory.actualStock - inventory.reserStock;
-        // Lưu lại inventory
         await inventory.save();
       }
 
-      // Trả về thành công
-      return { success: true, message: "Cảm ơn" };
+      return { success: true, message: "Update Kho thành công" };
     } catch (error) {
-      // Xử lý lỗi
+      console.error("Lỗi khi cập nhật reserstock:", error);
+      return { success: false, message: error.message };
+    }
+  },
+  ReturnItemsAfterPaymentSucces: async (listproduct) => {
+    try {
+      for (const product of listproduct) {
+        const productId = product.productId;
+        const quantity = product.quantity;
+
+        const inventory = await inventoryModel.findOne({
+          productId: productId,
+        });
+
+        if (!inventory) {
+          throw new Error(
+            `Không tìm thấy inventory cho sản phẩm có productId: ${productId}`
+          );
+        }
+        // decrease actualStock by reserStock
+        inventory.actualStock -= quantity;
+        // decrease reserverStock by quantity of this order
+        inventory.reserStock -= quantity;
+        await inventory.save();
+      }
+
+      return { success: true, message: "Update Kho thành công" };
+    } catch (error) {
       console.error("Lỗi khi cập nhật reserstock:", error);
       return { success: false, message: error.message };
     }

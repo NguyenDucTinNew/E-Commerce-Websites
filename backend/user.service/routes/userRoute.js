@@ -54,7 +54,12 @@ router.post("/login", (req, res, next) => {
         "EX",
         86400 // TTL 1 ngày
       );
-
+      await redisConfig.getRedis().set(
+        "userId",
+        user.id,
+        "EX",
+        86400 // TTL 1 ngày
+      );
       // Tạo JWT chứa sessionID
       const token = jwt.sign(
         { sessionId: req.sessionID },
@@ -71,7 +76,7 @@ router.post("/login", (req, res, next) => {
         token,
         user: {
           id: user.id,
-          name: user.name,
+          name: user.username,
           email: user.email,
           role: user.role,
         },
@@ -117,7 +122,7 @@ router.get(
 );
 router.delete(
   "/deleteuser/:userid",
- // wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
+  // wrapRequestHandler(isAuthenticated), // Kiểm tra xác thực
   wrapRequestHandler(deleteUser)
 );
 router.put(

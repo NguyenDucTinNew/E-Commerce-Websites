@@ -12,9 +12,11 @@
   "backend": "file:",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "connect-redis": "^8.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
     "inventory.service": "file:",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
@@ -22,7 +24,10 @@
     "mongoose": "^8.8.3",
     "mongoose-paginate-v2": "^1.8.5",
     "morgan": "^1.10.0",
+    "passport": "^0.7.0",
     "product.service": "file:",
+    "redis": "^4.7.0",
+    "session": "^0.1.0",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {

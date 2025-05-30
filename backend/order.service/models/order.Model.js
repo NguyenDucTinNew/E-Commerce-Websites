@@ -4,15 +4,13 @@ import mongoosePaginate from "mongoose-paginate-v2";
 const OrderSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
       required: true,
     },
     items: [
       {
         itemId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
+          type: String,
           required: true,
         },
         quantity: {
@@ -35,13 +33,10 @@ const OrderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "Paid", "cancelled", "shipping", "completed"],
+      enum: ["pending", "cancelled", "shipping", "completed"],
       default: "pending",
     },
     shippingAddress: {
-      type: String,
-    },
-    paymentMethod: {
       type: String,
     },
     orderType: {

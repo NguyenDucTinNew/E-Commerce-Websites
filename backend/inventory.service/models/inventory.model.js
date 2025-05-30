@@ -25,9 +25,12 @@ const inventorySchema = new mongoose.Schema(
       type: String, // Ví dụ: "Kho A", "Chi nhánh Hà Nội"
     },
   },
+
   {
     timestamps: true,
+    __v: { type: Number, select: false },
   }
+  // Version key
 );
 
 // Cập nhật lastUpdated trước khi lưu
