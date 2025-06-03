@@ -17,4 +17,5 @@ router.put(
   "/updateStatusOrder/:orderId",
   wrapRequestHandler(orderController.updateStatusOrder)
 );
+router.get("/testWorker", wrapRequestHandler(orderController.testWorker));
 export default router;

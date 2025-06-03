@@ -5,6 +5,7 @@ import swaggerUI from "swagger-ui-express";
 import connectDB from "./configs/connect-db.configs.js";
 import morgan from "morgan";
 import rootRoutes from "./routes/index.js";
+import { startComsumer } from "./workers/woker1.js";
 
 dotenv.config();
 const app = express();
@@ -26,7 +27,7 @@ app.use(
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   })
 );
-
+startComsumer();
 // Kết nối đến cơ sở dữ liệu
 connectDB();
 // Định nghĩa routes

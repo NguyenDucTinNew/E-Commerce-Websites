@@ -80,6 +80,8 @@ export const inventoryController = {
           console.log(stock);
           return {
             productId: product.productId,
+            quantity: product.quantity,
+            price: product.price,
           };
         })
       );

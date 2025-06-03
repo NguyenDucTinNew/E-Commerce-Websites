@@ -1,6 +1,12 @@
 import { orderService } from "../service/order.service.js";
 import { HTTP_STATUS } from "../common/http-status.common.js";
 import mongoose from "mongoose";
+import {
+  connectRabbitMQ,
+  sendToQueue,
+  consumeQueue,
+} from "../testmsq/rabbitmq.model.js";
+
 export const orderController = {
   createCart: async (req, res) => {
     const userid = new mongoose.Types.ObjectId(req.params.userid);
@@ -53,6 +59,16 @@ export const orderController = {
         message: error.message,
       });
     }
+  },
+  testWorker: async (req, res) => {
+    console.log("start worker");
+    await sendToQueue("workertest1", {
+      productId: 123456,
+    });
+    return res.status(HTTP_STATUS.OK).json({
+      succes: true,
+      message: "worker's working now , wait a minutes",
+    });
   },
 };
 

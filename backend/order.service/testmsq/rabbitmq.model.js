@@ -1,7 +1,8 @@
 // rabbitmq.model.js
 import amqplib from "amqplib";
 
-const RABBITMQ_URL = process.env.AMQP_URL_CLOUD;
+const RABBITMQ_URL =
+  "amqps://zoazyftn:3lVa2N4tVNE-whk5fJ4Q8NBoYGE_e5GN@armadillo.rmq.cloudamqp.com/zoazyftn";
 
 let conn = null;
 let channel = null;
