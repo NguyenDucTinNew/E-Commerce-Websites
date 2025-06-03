@@ -17,6 +17,7 @@ const inventorySchema = new mongoose.Schema(
       type: Number,
       default: 0, // Số lượng đã đặt trước nhưng chưa giao hàng
     },
+  
     avaliableStock: {
       type: Number,
     },

@@ -70,6 +70,7 @@ connectDB();
 // Định nghĩa routes
 app.use(`/api/v1`, rootRoutes);
 await incrby("count", 10);
+
 const port = process.env.PORT || 8082;
 app.listen(port, () => {
   console.log("🚀 ~ app.listen ~ port:", port);

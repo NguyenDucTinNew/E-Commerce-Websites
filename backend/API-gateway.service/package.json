@@ -30,6 +30,7 @@
     "redis": "^4.7.0"
   },
   "devDependencies": {
+    "amqplib": "^0.10.8",
     "nodemon": "^3.1.7"
   }
 }

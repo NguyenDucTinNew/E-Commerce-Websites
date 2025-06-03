@@ -4,6 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import rootRoutes from "./routes/index.js";
 import redisConfig from "./redisseting/init.redis.js";
+
 import {
   get,
   set,

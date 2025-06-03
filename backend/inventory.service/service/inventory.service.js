@@ -1,6 +1,16 @@
 import inventoryModel from "../models/inventory.model.js";
 import { HTTP_STATUS } from "../common/http-status.common.js";
+import {
+  get,
+  set,
+  incrby,
+  decrby,
+  exists,
+  setnx,
+} from "../redisseting/model.redis.js"; // Đảm bảo đường dẫn đúng
+import redis from "../redisseting/init.redis.js";
 
+redis.initRedis(); // Khởi tạo kết nối Redis
 export const inventoryService = {
   createInventory: async (inventoryData, productId) => {
     try {
@@ -51,6 +61,13 @@ export const inventoryService = {
     }
   },
 
+  testredis: async () => {
+    await incrby("counttest", 10);
+    console.log("redis chay duoc rui ne");
+    return {
+      success: true,
+    };
+  },
   CheckavAilableStock: async (product) => {
     try {
       const productId = product.id;
@@ -72,23 +89,79 @@ export const inventoryService = {
     }
   },
 
-  checkItemsInInventory: async (items) => {
-    const check = await Promise.all(
-      items.map(async (item) => {
-        const inventory = await inventoryModel.findOne({
-          productId: item.productId,
-        });
-        if (!inventory) {
-          return false; 
-        }
-        if (inventory.avaliableStock < item.quantity) {
-          return false; 
-        }
-        return true;
-      })
-    );
-  },
+  // checkItemsInInventory: async (items) => {
+  //   const check = await Promise.all(
+  //     items.map(async (item) => {
+  //       const inventory = await inventoryModel.findOne({
+  //         productId: item.productId,
+  //       });
+  //       if (!inventory) {
+  //         return false;
+  //       }
+  //       if (inventory.avaliableStock < item.quantity) {
+  //         return false;
+  //       }
+  //       return true;
+  //     })
+  //   );
+  // },
+  // checkstock with setnx
+  checkMultiStock: async (req, res) => {
+    const products = req.body;
+    console.log(products);
+    try {
+      let keyProduct;
+      let keyStock;
+      // 2. Kiểm tra stock cho từng sản phẩm
+      const stockResults = await Promise.all(
+        products.map(async (product) => {
+          keyStock = `stock:${product.productId}`;
+          // get available stock of this item if itsn't exixst create a new one
+          const getStock = await exists(keyStock);
+          if (!getStock) {
+            const stockProduct = await Inventory.findOne({
+              productId: product.productId,
+            }).select("availableStock");
+            await set(keyStock, stockProduct);
+          }
+          console.log(product.productId);
+          // getStock
+          const stock = await get(`stock:${product.productId}`);
+          keyProduct = `key_product:${product.productId}`;
+          const getkey = await exists(keyProduct);
+          if (!getkey) {
+            await setnx(keyProduct, 0);
+          }
+          // getnumbersold
+          let numberSold;
+          numberSold = await get(keyProduct);
+          numberSold = await incrby(keyProduct, product.quantity);
+          if (numberSold > stock) {
+            console.log("Hết hàng");
+            return {
+              success: false,
+              message: `Không đủ hàng, ${product.productId}`,
+            };
+          }
+          return {
+            productId: product.productId,
+            requested: product.quantity,
+            available: parseInt(stock || 0),
+          };
+        })
+      );
 
+      return res.json({
+        success: true,
+        checkedItems: stockResults, // (Optional) Trả về thông tin kiểm tra
+      });
+    } catch (error) {
+      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: "Lỗi sever",
+      });
+    }
+  },
   updateInventory: async (productId, quantityToAdd) => {
     const inventory = await inventoryModel.findOne({ productId });
 

@@ -10,7 +10,6 @@ export const get = async (key) => {
     throw err;
   }
 };
-
 export const set = async (key, value, options = {}) => {
   try {
     const client = redis.getRedis();

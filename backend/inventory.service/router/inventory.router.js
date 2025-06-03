@@ -32,5 +32,9 @@ router.put(
   "/returnItemToStockPaymentFailed",
   wrapRequestHandler(inventoryController.returnItemsafterPaymenFailed)
 );
-
+router.get("/testredis", wrapRequestHandler(inventoryController.testredis));
+router.post(
+  "/checkMultiProducts",
+  wrapRequestHandler(inventoryController.checkMultiStock)
+);
 export default router;
