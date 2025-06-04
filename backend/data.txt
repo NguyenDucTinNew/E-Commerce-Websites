@@ -1,4 +1,14 @@
 {
-  "username": "newuser2",
-  "password": "maoi123@45" 
+  "listproduct": [
+    {
+      "productId": "6826f70bb0cafe6491bd6e71",
+      "quantity": 10,
+      "price" : 8000
+    },
+    {
+      "productId": "682dd2603beeabc395a5662e",
+      "quantity": 10,
+       "price" : 150000
+    }
+  ]
 }
